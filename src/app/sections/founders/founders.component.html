@@ -1,19 +1,20 @@
 <div class="container">
   <div class="founders__head" appReveal>
-    <p class="eyebrow">The team</p>
+    <p class="eyebrow">{{ i18n.t().founders.eyebrow }}</p>
     <h2 class="section-title">
-      Founders of <span class="gradient-text">ADN‑SPACE & ADN‑SPACE Lab.</span>
+      {{ i18n.t().founders.titleStart }}
+      <span class="gradient-text">{{ i18n.t().founders.titleHighlight }}</span>
     </h2>
   </div>
 
   <div class="founders__grid">
-    @for (founder of founders; track founder.name; let i = $index) {
+    @for (founder of i18n.t().founders.items; track founder.name; let i = $index) {
       <div
         class="founders__card glass-panel glass-panel--interactive"
         [appReveal]="i * 100"
         [appTilt]="6"
       >
-        <img [src]="'/images/' + founder.image" [alt]="founder.name" loading="lazy" />
+        <img [src]="'/images/' + images[i]" [alt]="founder.name" loading="lazy" />
         <h3>{{ founder.name }}</h3>
         <p>{{ founder.role }}</p>
       </div>

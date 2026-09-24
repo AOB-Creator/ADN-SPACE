@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RevealDirective } from '../../shared/reveal.directive';
 import { IconComponent } from '../../shared/icon.component';
 import { SOCIAL_LINKS } from '../../shared/content';
+import { I18nService } from '../../i18n/i18n.service';
 
 @Component({
   selector: 'app-contact',
@@ -13,5 +14,6 @@ import { SOCIAL_LINKS } from '../../shared/content';
   host: { id: 'contact', class: 'section' },
 })
 export class ContactComponent {
+  protected readonly i18n = inject(I18nService);
   protected readonly links = SOCIAL_LINKS;
 }

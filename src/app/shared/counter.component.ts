@@ -6,6 +6,7 @@ import {
   OnInit,
   inject,
   input,
+  numberAttribute,
   signal,
 } from '@angular/core';
 
@@ -19,7 +20,7 @@ import {
 export class CounterComponent implements OnInit, OnDestroy {
   private readonly el = inject(ElementRef<HTMLElement>);
 
-  readonly value = input.required<number>();
+  readonly value = input.required({ transform: numberAttribute });
   readonly suffix = input('');
   readonly duration = input(1400);
 

@@ -1,17 +1,15 @@
 <div class="container partners__grid">
   <div class="partners__copy" appReveal>
-    <p class="eyebrow">Global cooperation</p>
+    <p class="eyebrow">{{ i18n.t().partners.eyebrow }}</p>
     <h2 class="section-title">
-      Bringing <span class="gradient-text">world‑class expertise</span> into Uzbekistan.
+      {{ i18n.t().partners.titleStart }}
+      <span class="gradient-text">{{ i18n.t().partners.titleHighlight }}</span>
+      {{ i18n.t().partners.titleEnd }}
     </h2>
-    <p class="partners__lede">
-      ADN‑SPACE has established active business partnerships with leading Chinese drone
-      manufacturers, bringing high‑performance technology into Uzbekistan — adapted to the
-      needs of our environment and economy.
-    </p>
+    <p class="partners__lede">{{ i18n.t().partners.lede }}</p>
 
     <ul class="partners__list">
-      @for (partner of partners; track partner.name) {
+      @for (partner of i18n.t().partners.items; track partner.name) {
         <li class="glass-panel">
           <strong>{{ partner.name }}</strong>
           <span>{{ partner.detail }}</span>
@@ -19,10 +17,7 @@
       }
     </ul>
 
-    <p class="partners__note">
-      🤝 These collaborations bring world‑class expertise and high‑performance technology
-      into Uzbekistan, adapted to the needs of our environment and economy.
-    </p>
+    <p class="partners__note">{{ i18n.t().partners.note }}</p>
   </div>
 
   <div class="partners__media glass-panel" [appReveal]="120">
@@ -34,7 +29,7 @@
 </div>
 
 <div class="partners__marquee-wrap" [appReveal]="180">
-  <p class="partners__marquee-label">Business partnerships & companies willing to work with us</p>
+  <p class="partners__marquee-label">{{ i18n.t().partners.marqueeLabel }}</p>
   <div class="partners__marquee">
     <div class="partners__marquee-track">
       @for (logo of marqueeLogos; track $index) {

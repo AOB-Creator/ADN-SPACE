@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RevealDirective } from '../../shared/reveal.directive';
 import { CounterComponent } from '../../shared/counter.component';
+import { I18nService } from '../../i18n/i18n.service';
 
 @Component({
   selector: 'app-about',
@@ -12,10 +13,5 @@ import { CounterComponent } from '../../shared/counter.component';
   host: { id: 'about', class: 'section' },
 })
 export class AboutComponent {
-  protected readonly facts = [
-    { label: 'Established', value: '2024' },
-    { label: 'Headquarters', value: 'Karakalpakstan, Republic of Uzbekistan' },
-    { label: 'Research center', value: 'ADN‑SPACE Laboratory' },
-    { label: 'Co‑founded by', value: 'University students' },
-  ];
+  protected readonly i18n = inject(I18nService);
 }

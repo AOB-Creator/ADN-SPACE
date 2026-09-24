@@ -86,7 +86,7 @@
   img {
     max-height: 2.5rem;
     width: auto;
-    filter: grayscale(1) brightness(1.6);
+    filter: var(--logo-filter);
     opacity: 0.75;
     transition: filter 0.3s, opacity 0.3s;
   }

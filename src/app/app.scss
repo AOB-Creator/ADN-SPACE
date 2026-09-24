@@ -9,7 +9,7 @@
   z-index: 100;
   padding: 0.6rem 1rem;
   border-radius: 0.5rem;
-  background: var(--void-800);
+  background: var(--bg-elevated);
   color: var(--text-hi);
   transition: top 0.25s;
 }
@@ -25,8 +25,8 @@ main {
     background: linear-gradient(
       180deg,
       transparent,
-      rgba(255, 255, 255, 0.02) 20%,
-      rgba(255, 255, 255, 0.02) 80%,
+      var(--stripe) 20%,
+      var(--stripe) 80%,
       transparent
     );
   }

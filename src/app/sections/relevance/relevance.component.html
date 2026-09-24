@@ -1,18 +1,16 @@
 <div class="container relevance__grid">
   <div class="relevance__intro" appReveal>
-    <p class="eyebrow">Why it matters</p>
+    <p class="eyebrow">{{ i18n.t().relevance.eyebrow }}</p>
     <h2 class="section-title">
-      The relevance of drone <span class="gradient-text">development in Uzbekistan.</span>
+      {{ i18n.t().relevance.titleStart }}
+      <span class="gradient-text">{{ i18n.t().relevance.titleHighlight }}</span>
     </h2>
-    <p>
-      From agricultural modernization to border security and smart cities — UAV technology
-      touches nearly every strategic priority on Uzbekistan's national agenda.
-    </p>
+    <p>{{ i18n.t().relevance.intro }}</p>
     <img src="/images/dronetheme.jpg" alt="Drone over Uzbekistan landscape" loading="lazy" />
   </div>
 
   <div class="relevance__accordion" [appReveal]="120">
-    @for (section of sections; track section.title; let i = $index) {
+    @for (section of i18n.t().relevance.sections; track section.title; let i = $index) {
       <div class="relevance__item" [class.is-open]="activeIndex() === i">
         <button
           class="relevance__trigger"

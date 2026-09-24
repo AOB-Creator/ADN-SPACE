@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RevealDirective } from '../../shared/reveal.directive';
-import { DRONE_SPECS } from '../../shared/content';
+import { I18nService } from '../../i18n/i18n.service';
 
 @Component({
   selector: 'app-specs',
@@ -12,5 +12,5 @@ import { DRONE_SPECS } from '../../shared/content';
   host: { id: 'technology', class: 'section' },
 })
 export class SpecsComponent {
-  protected readonly specs = DRONE_SPECS;
+  protected readonly i18n = inject(I18nService);
 }

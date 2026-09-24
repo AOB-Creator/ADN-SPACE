@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { RevealDirective } from '../../shared/reveal.directive';
-import { RELEVANCE } from '../../shared/content';
+import { I18nService } from '../../i18n/i18n.service';
 
 @Component({
   selector: 'app-relevance',
@@ -12,7 +12,7 @@ import { RELEVANCE } from '../../shared/content';
   host: { class: 'section' },
 })
 export class RelevanceComponent {
-  protected readonly sections = RELEVANCE;
+  protected readonly i18n = inject(I18nService);
   protected readonly activeIndex = signal(0);
 
   select(index: number): void {

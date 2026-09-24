@@ -1,14 +1,15 @@
 <div class="container">
   <div class="decrees__head" appReveal>
-    <p class="eyebrow">National policy</p>
+    <p class="eyebrow">{{ i18n.t().decrees.eyebrow }}</p>
     <h2 class="section-title">
-      Presidential decrees <span class="gradient-text">powering the drone industry.</span>
+      {{ i18n.t().decrees.titleStart }}
+      <span class="gradient-text">{{ i18n.t().decrees.titleHighlight }}</span>
     </h2>
   </div>
 
   <ol class="decrees__timeline">
-    @for (decree of decrees; track decree.title; let i = $index) {
-      <li class="decrees__item" [attr.data-accent]="decree.accent" [appReveal]="i * 90">
+    @for (decree of i18n.t().decrees.items; track decree.title; let i = $index) {
+      <li class="decrees__item" [attr.data-accent]="accents[i]" [appReveal]="i * 90">
         <span class="decrees__dot"></span>
         <div class="decrees__card glass-panel">
           <p class="decrees__date">{{ decree.date }}</p>
@@ -20,13 +21,8 @@
   </ol>
 
   <div class="decrees__vision glass-panel glass-panel--interactive" [appReveal]="360">
-    <p class="eyebrow">Strategic vision</p>
-    <h3>"Uzbekistan – 2030"</h3>
-    <p>
-      These decrees are part of Uzbekistan's broader strategy to become a Central Asian
-      leader in drone and aerospace innovation. President Mirziyoyev's vision focuses on
-      integrating UAVs in agriculture, defense, logistics, and smart city systems — while
-      nurturing local talent and international cooperation.
-    </p>
+    <p class="eyebrow">{{ i18n.t().decrees.visionEyebrow }}</p>
+    <h3>{{ i18n.t().decrees.visionTitle }}</h3>
+    <p>{{ i18n.t().decrees.visionText }}</p>
   </div>
 </div>

@@ -6,33 +6,78 @@
     </a>
 
     <nav class="nav__links">
-      @for (link of links; track link.href) {
-        <a [href]="link.href">{{ link.label }}</a>
-      }
+      <a href="#about">{{ i18n.t().nav.links.about }}</a>
+      <a href="#applications">{{ i18n.t().nav.links.applications }}</a>
+      <a href="#partners">{{ i18n.t().nav.links.partners }}</a>
+      <a href="#technology">{{ i18n.t().nav.links.technology }}</a>
+      <a href="#founders">{{ i18n.t().nav.links.founders }}</a>
+      <a href="#contact">{{ i18n.t().nav.links.contact }}</a>
     </nav>
 
-    <a class="btn btn-primary nav__cta" href="#contact">Contact us</a>
+    <div class="nav__tools">
+      <div class="nav__lang">
+        <button
+          type="button"
+          class="nav__icon-btn nav__lang-trigger"
+          (click)="toggleLangMenu()"
+          [attr.aria-expanded]="langMenuOpen()"
+          [attr.aria-label]="i18n.t().language.label"
+        >
+          <app-icon name="globe" />
+          <span>{{ i18n.locale().toUpperCase() }}</span>
+        </button>
 
-    <button
-      class="nav__toggle"
-      type="button"
-      [class.is-open]="menuOpen()"
-      (click)="toggleMenu()"
-      [attr.aria-expanded]="menuOpen()"
-      aria-label="Toggle navigation menu"
-    >
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
+        @if (langMenuOpen()) {
+          <div class="nav__lang-menu">
+            @for (option of locales; track option.code) {
+              <button
+                type="button"
+                class="nav__lang-option"
+                [class.is-active]="i18n.locale() === option.code"
+                (click)="selectLocale(option.code)"
+              >
+                {{ option.label }}
+              </button>
+            }
+          </div>
+        }
+      </div>
+
+      <button
+        type="button"
+        class="nav__icon-btn"
+        (click)="theme.toggle()"
+        [attr.aria-label]="theme.theme() === 'dark' ? i18n.t().theme.toggleToLight : i18n.t().theme.toggleToDark"
+      >
+        <app-icon [name]="theme.theme() === 'dark' ? 'sun' : 'moon'" />
+      </button>
+
+      <a class="btn btn-primary nav__cta" href="#contact">{{ i18n.t().nav.cta }}</a>
+
+      <button
+        class="nav__toggle"
+        type="button"
+        [class.is-open]="menuOpen()"
+        (click)="toggleMenu()"
+        [attr.aria-expanded]="menuOpen()"
+        aria-label="Toggle navigation menu"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
   </div>
 
   @if (menuOpen()) {
     <nav class="nav__mobile" (click)="closeMenu()">
-      @for (link of links; track link.href) {
-        <a [href]="link.href">{{ link.label }}</a>
-      }
-      <a class="btn btn-primary" href="#contact">Contact us</a>
+      <a href="#about">{{ i18n.t().nav.links.about }}</a>
+      <a href="#applications">{{ i18n.t().nav.links.applications }}</a>
+      <a href="#partners">{{ i18n.t().nav.links.partners }}</a>
+      <a href="#technology">{{ i18n.t().nav.links.technology }}</a>
+      <a href="#founders">{{ i18n.t().nav.links.founders }}</a>
+      <a href="#contact">{{ i18n.t().nav.links.contact }}</a>
+      <a class="btn btn-primary" href="#contact">{{ i18n.t().nav.cta }}</a>
     </nav>
   }
 </header>

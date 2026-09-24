@@ -3,20 +3,38 @@
   inset-inline: 0;
   top: 0;
   z-index: 50;
+
+  // The bar starts transparent, floating over the hero — which always stays
+  // a dark "space" scene regardless of site theme (see hero.component.scss)
+  // — so its own colors stay fixed-dark until `.nav--scrolled` gives it an
+  // opaque background, at which point it switches to the real theme tokens.
+  --nav-fg: #f7f9fd;
+  --nav-fg-mid: #b8c1da;
+  --nav-surface: rgba(255, 255, 255, 0.08);
+  --nav-border: rgba(255, 255, 255, 0.14);
+  --nav-border-glow: rgba(94, 234, 212, 0.5);
 }
 
 .nav {
   padding-block: 1.4rem;
-  transition: padding 0.35s var(--ease-out-expo), background 0.35s, border-color 0.35s;
+  color: var(--nav-fg);
+  transition: padding 0.35s var(--ease-out-expo), background 0.35s, border-color 0.35s,
+    color 0.35s;
   border-bottom: 1px solid transparent;
 }
 
 .nav--scrolled {
   padding-block: 0.9rem;
-  background: rgba(5, 7, 15, 0.72);
+  background: color-mix(in srgb, var(--bg) 72%, transparent);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom-color: var(--border-soft);
+
+  --nav-fg: var(--text-hi);
+  --nav-fg-mid: var(--text-mid);
+  --nav-surface: var(--surface);
+  --nav-border: var(--border-soft);
+  --nav-border-glow: var(--border-glow);
 }
 
 .nav__bar {
@@ -48,7 +66,7 @@
   display: none;
   gap: 1.8rem;
   font-size: 0.9rem;
-  color: var(--text-mid);
+  color: var(--nav-fg-mid);
 
   a {
     transition: color 0.25s;
@@ -56,6 +74,90 @@
 
   a:hover {
     color: var(--cyan-soft);
+  }
+}
+
+.nav__tools {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.nav__icon-btn {
+  display: grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 999px;
+  border: 1px solid var(--nav-border);
+  background: var(--nav-surface);
+  color: var(--nav-fg);
+  cursor: pointer;
+  transition: border-color 0.3s, background 0.3s, color 0.3s, transform 0.3s var(--ease-spring);
+
+  app-icon {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  &:hover {
+    border-color: var(--nav-border-glow);
+    color: var(--cyan-soft);
+    transform: translateY(-1px);
+  }
+}
+
+.nav__lang {
+  position: relative;
+}
+
+.nav__lang-trigger {
+  width: auto;
+  padding-inline: 0.85rem;
+  gap: 0.4rem;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.nav__lang-menu {
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 6rem;
+  padding: 0.4rem;
+  gap: 0.15rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-soft);
+  border-radius: 0.9rem;
+  box-shadow: var(--shadow-deep);
+  z-index: 10;
+}
+
+.nav__lang-option {
+  padding: 0.55rem 0.75rem;
+  border: none;
+  border-radius: 0.6rem;
+  background: transparent;
+  color: var(--text-mid);
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+
+  &:hover {
+    background: var(--surface);
+    color: var(--text-hi);
+  }
+
+  &.is-active {
+    background: var(--grad-aurora);
+    color: var(--on-accent);
   }
 }
 
@@ -72,14 +174,14 @@
   width: 2.4rem;
   height: 2.4rem;
   border-radius: 999px;
-  border: 1px solid var(--border-soft);
-  background: var(--surface);
+  border: 1px solid var(--nav-border);
+  background: var(--nav-surface);
   cursor: pointer;
 
   span {
     width: 1.1rem;
     height: 2px;
-    background: var(--text-hi);
+    background: var(--nav-fg);
     transition: transform 0.3s, opacity 0.3s;
   }
 
@@ -101,9 +203,13 @@
   flex-direction: column;
   gap: 1.1rem;
   padding: 1.5rem 1.5rem 2rem;
-  background: var(--void-800);
+  background: var(--bg-elevated);
   border-top: 1px solid var(--border-soft);
   font-family: var(--font-display);
+  // This dropdown always has its own opaque, theme-colored background (unlike
+  // the transparent bar above it), so it uses the real theme text color
+  // rather than the hero-safe --nav-fg.
+  color: var(--text-hi);
 
   a {
     padding-block: 0.3rem;
