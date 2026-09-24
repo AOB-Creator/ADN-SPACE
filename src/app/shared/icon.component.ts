@@ -10,7 +10,10 @@ export type IconName =
   | 'linkedin'
   | 'facebook'
   | 'arrow-down'
-  | 'sparkle';
+  | 'sparkle'
+  | 'sun'
+  | 'moon'
+  | 'globe';
 
 @Component({
   selector: 'app-icon',
@@ -76,6 +79,17 @@ export type IconName =
         }
         @case ('sparkle') {
           <path d="M12 3l1.8 4.9L18.5 9.6l-4.7 1.8L12 16.3l-1.8-4.9L5.5 9.6l4.7-1.7z" />
+        }
+        @case ('sun') {
+          <path d="M12 5.5a6.5 6.5 0 1 0 0 13a6.5 6.5 0 0 0 0 -13z" />
+          <path d="M12 1.5v2M12 20.5v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1.5 12h2M20.5 12h2M4.2 19.8l1.4 -1.4M18.4 5.6l1.4 -1.4" />
+        }
+        @case ('moon') {
+          <path d="M20.5 14.2a8.5 8.5 0 1 1 -10.7 -10.7a7 7 0 0 0 10.7 10.7z" />
+        }
+        @case ('globe') {
+          <path d="M12 3m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+          <path d="M3 12h18M12 3a13.7 13.7 0 0 1 0 18M12 3a13.7 13.7 0 0 0 0 18" />
         }
       }
     </svg>

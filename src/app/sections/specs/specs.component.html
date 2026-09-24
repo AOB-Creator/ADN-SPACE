@@ -7,16 +7,12 @@
   </div>
 
   <div class="specs__copy" [appReveal]="120">
-    <p class="eyebrow">Drone hardware & software</p>
+    <p class="eyebrow">{{ i18n.t().specs.eyebrow }}</p>
     <h2 class="section-title">
-      Inside the drone: <span class="gradient-text">specs, components & code.</span>
+      {{ i18n.t().specs.titleStart }}
+      <span class="gradient-text">{{ i18n.t().specs.titleHighlight }}</span>
     </h2>
-    <p>
-      Drones are complex aerial systems that combine advanced hardware, software, and
-      firmware to achieve flight, autonomy, data capture, and synchronization. Here's a
-      breakdown of the core components of modern drones — from mechanical parts to
-      processors and coding frameworks.
-    </p>
+    <p>{{ i18n.t().specs.description }}</p>
 
     <img
       class="specs__diagram"
@@ -25,17 +21,17 @@
       loading="lazy"
     />
 
-    <h3 class="specs__table-title">Drone models & technical specifications</h3>
+    <h3 class="specs__table-title">{{ i18n.t().specs.tableTitle }}</h3>
     <div class="specs__table-wrap">
       <table class="specs__table">
         <thead>
           <tr>
-            <th>Drone model</th>
-            <th>Specs & tech summary</th>
+            <th>{{ i18n.t().specs.tableHeaders.model }}</th>
+            <th>{{ i18n.t().specs.tableHeaders.specs }}</th>
           </tr>
         </thead>
         <tbody>
-          @for (spec of specs; track spec.model) {
+          @for (spec of i18n.t().specs.items; track spec.model) {
             <tr>
               <td>{{ spec.model }}</td>
               <td>{{ spec.specs }}</td>

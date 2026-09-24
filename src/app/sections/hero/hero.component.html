@@ -8,39 +8,35 @@
   <span class="hero__bracket hero__bracket--br" aria-hidden="true"></span>
 
   <div class="container hero__content">
-    <p class="eyebrow">ADN&#8209;SPACE &middot; KARAKALPAKSTAN, UZBEKISTAN</p>
+    <p class="eyebrow">{{ i18n.t().hero.eyebrow }}</p>
 
     <h1 class="hero__title">
-      Engineering the<br />
-      <span class="gradient-text">future of flight.</span>
+      {{ i18n.t().hero.titleLine1 }}<br />
+      <span class="gradient-text">{{ i18n.t().hero.titleLine2 }}</span>
     </h1>
 
-    <p class="hero__lede">
-      A drone technology company born from student ambition — designing, building and
-      customizing next‑generation UAVs for agriculture, public safety, smart cities and
-      aerial logistics across Uzbekistan and beyond.
-    </p>
+    <p class="hero__lede">{{ i18n.t().hero.lede }}</p>
 
     <div class="hero__actions">
-      <a class="btn btn-primary" href="#applications">Explore the technology</a>
-      <a class="btn btn-ghost" href="#contact">Get in touch</a>
+      <a class="btn btn-primary" href="#applications">{{ i18n.t().hero.ctaPrimary }}</a>
+      <a class="btn btn-ghost" href="#contact">{{ i18n.t().hero.ctaSecondary }}</a>
     </div>
 
     <dl class="hero__stats">
       <div class="hero__stat">
-        <dt>Founded</dt>
+        <dt>{{ i18n.t().hero.stats.founded }}</dt>
         <dd>2024</dd>
       </div>
       <div class="hero__stat">
-        <dt>Max range</dt>
+        <dt>{{ i18n.t().hero.stats.maxRange }}</dt>
         <dd>15&nbsp;km</dd>
       </div>
       <div class="hero__stat">
-        <dt>Flight time</dt>
+        <dt>{{ i18n.t().hero.stats.flightTime }}</dt>
         <dd>55&nbsp;min</dd>
       </div>
       <div class="hero__stat">
-        <dt>Global partners</dt>
+        <dt>{{ i18n.t().hero.stats.partners }}</dt>
         <dd>3+</dd>
       </div>
     </dl>

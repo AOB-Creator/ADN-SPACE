@@ -1,17 +1,15 @@
 <div class="container">
   <div class="contact__panel glass-panel glass-panel--interactive" appReveal>
     <div class="contact__copy">
-      <p class="eyebrow">Let's build the future</p>
+      <p class="eyebrow">{{ i18n.t().contact.eyebrow }}</p>
       <h2 class="section-title">
-        Ready to bring your <span class="gradient-text">drone mission to life?</span>
+        {{ i18n.t().contact.titleStart }}
+        <span class="gradient-text">{{ i18n.t().contact.titleHighlight }}</span>
       </h2>
-      <p>
-        Whether you're exploring a partnership, need a custom UAV platform, or want to talk
-        about the future of Central Asia's drone ecosystem — we'd love to hear from you.
-      </p>
+      <p>{{ i18n.t().contact.description }}</p>
       <a class="btn btn-primary" href="mailto:business.alpamis@gmail.com">
         <app-icon name="mail" />
-        business.alpamis&#64;gmail.com
+        {{ i18n.t().contact.emailCta }}
       </a>
     </div>
 

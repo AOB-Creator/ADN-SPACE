@@ -1,13 +1,14 @@
 <div class="container">
   <div class="applications__head" appReveal>
-    <p class="eyebrow">Drone applications</p>
+    <p class="eyebrow">{{ i18n.t().applications.eyebrow }}</p>
     <h2 class="section-title">
-      One airframe platform, <span class="gradient-text">six mission profiles.</span>
+      {{ i18n.t().applications.titleStart }}
+      <span class="gradient-text">{{ i18n.t().applications.titleHighlight }}</span>
     </h2>
   </div>
 
   <div class="applications__grid">
-    @for (app of applications; track app.title; let i = $index) {
+    @for (app of i18n.t().applications.items; track app.title; let i = $index) {
       <article
         class="applications__card glass-panel glass-panel--interactive"
         [appReveal]="i * 80"

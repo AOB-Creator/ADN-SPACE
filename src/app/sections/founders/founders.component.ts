@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RevealDirective } from '../../shared/reveal.directive';
 import { TiltDirective } from '../../shared/tilt.directive';
-import { FOUNDERS } from '../../shared/content';
+import { FOUNDER_IMAGES } from '../../shared/content';
+import { I18nService } from '../../i18n/i18n.service';
 
 @Component({
   selector: 'app-founders',
@@ -13,5 +14,6 @@ import { FOUNDERS } from '../../shared/content';
   host: { id: 'founders', class: 'section' },
 })
 export class FoundersComponent {
-  protected readonly founders = FOUNDERS;
+  protected readonly i18n = inject(I18nService);
+  protected readonly images = FOUNDER_IMAGES;
 }

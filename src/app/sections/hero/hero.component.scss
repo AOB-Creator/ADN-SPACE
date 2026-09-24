@@ -1,5 +1,26 @@
 :host {
   display: block;
+
+  // The hero is an immersive dark "space" scene and intentionally stays dark
+  // even when the rest of the site is in light mode — the starfield/3D drone
+  // only read well against a near-black backdrop.
+  --bg: #070a12;
+  --bg-elevated: #0c1120;
+  --surface: rgba(255, 255, 255, 0.045);
+  --surface-strong: rgba(255, 255, 255, 0.08);
+  --border-soft: rgba(255, 255, 255, 0.1);
+  --border-glow: rgba(94, 234, 212, 0.4);
+  --cyan: #4deee0;
+  --cyan-soft: #a4f6ec;
+  --violet: #9b81ff;
+  --magenta: #ff6dcf;
+  --on-accent: #0a0e1a;
+  --text-hi: #f7f9fd;
+  --text-mid: #b8c1da;
+  --text-lo: #838da8;
+
+  color: var(--text-hi);
+  background: var(--bg);
 }
 
 .hero__stage {
@@ -23,7 +44,7 @@
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: radial-gradient(ellipse at center, transparent 35%, var(--void-900) 92%);
+  background: radial-gradient(ellipse at center, transparent 35%, var(--bg) 92%);
   pointer-events: none;
 }
 

@@ -10,6 +10,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { DroneScene } from './drone-scene';
+import { I18nService } from '../../i18n/i18n.service';
 
 @Component({
   selector: 'app-hero',
@@ -20,6 +21,7 @@ import { DroneScene } from './drone-scene';
   host: { class: 'hero' },
 })
 export class HeroComponent implements AfterViewInit, OnDestroy {
+  protected readonly i18n = inject(I18nService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly canvasRef = viewChild.required<ElementRef<HTMLCanvasElement>>('canvas');
   private readonly stageRef = viewChild.required<ElementRef<HTMLElement>>('stage');

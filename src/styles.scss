@@ -1,43 +1,52 @@
 // ADN-SPACE — global design system
-// A dark aerospace/HUD theme: deep void backgrounds, neon cyan + violet + magenta
-// accents, glassmorphism, animated gradient aurora, and glow-driven motion.
+// A refined aerospace/HUD theme: soft neon cyan + violet + magenta accents,
+// glassmorphism, animated gradient aurora, and glow-driven motion — with a
+// full light-mode counterpart driven by `data-theme` on <html>.
 
 :root {
   color-scheme: dark;
 
-  // ---- palette -------------------------------------------------------
-  --void-950: #030509;
-  --void-900: #05070f;
-  --void-800: #0a0e1a;
-  --void-700: #101627;
-  --void-600: #171f36;
+  // ---- semantic tokens (dark, default) --------------------------------
+  --bg: #070a12;
+  --bg-elevated: #0c1120;
+  --bg-raise: #121a2e;
 
-  --surface: rgba(255, 255, 255, 0.04);
-  --surface-strong: rgba(255, 255, 255, 0.07);
-  --border-soft: rgba(255, 255, 255, 0.09);
-  --border-glow: rgba(80, 246, 224, 0.35);
+  --surface: rgba(255, 255, 255, 0.045);
+  --surface-strong: rgba(255, 255, 255, 0.08);
+  --border-soft: rgba(255, 255, 255, 0.1);
+  --border-glow: rgba(94, 234, 212, 0.4);
+  --stripe: rgba(255, 255, 255, 0.025);
 
-  --cyan: #3ef2d8;
-  --cyan-soft: #8ff8e8;
-  --violet: #8b6bff;
-  --violet-soft: #b6a4ff;
-  --magenta: #ff4fc0;
-  --amber: #ffb545;
+  --cyan: #4deee0;
+  --cyan-soft: #a4f6ec;
+  --violet: #9b81ff;
+  --violet-soft: #c7b8ff;
+  --magenta: #ff6dcf;
+  --amber: #ffc35c;
 
-  --text-hi: #f4f7fc;
-  --text-mid: #b7c0d8;
-  --text-lo: #7c869e;
+  --on-accent: #0a0e1a;
+
+  --text-hi: #f7f9fd;
+  --text-mid: #b8c1da;
+  --text-lo: #838da8;
+
+  --grid-line: rgba(255, 255, 255, 0.05);
+  --glow-1: rgba(155, 129, 255, 0.24);
+  --glow-2: rgba(77, 238, 224, 0.16);
+  --glow-3: rgba(255, 109, 207, 0.13);
+
+  --logo-filter: grayscale(1) brightness(1.7);
+
+  --shadow-deep: 0 30px 80px -30px rgba(0, 0, 0, 0.7);
+  --shadow-glow: 0 0 0 1px var(--border-glow), 0 0 40px -8px rgba(77, 238, 224, 0.4);
 
   --grad-aurora: linear-gradient(120deg, var(--cyan) 0%, var(--violet) 50%, var(--magenta) 100%);
   --grad-aurora-soft: linear-gradient(
     120deg,
-    rgba(62, 242, 216, 0.18) 0%,
-    rgba(139, 107, 255, 0.18) 50%,
-    rgba(255, 79, 192, 0.18) 100%
+    color-mix(in srgb, var(--cyan) 22%, transparent) 0%,
+    color-mix(in srgb, var(--violet) 22%, transparent) 50%,
+    color-mix(in srgb, var(--magenta) 22%, transparent) 100%
   );
-
-  --shadow-deep: 0 30px 80px -30px rgba(0, 0, 0, 0.7);
-  --shadow-glow: 0 0 0 1px var(--border-glow), 0 0 40px -8px rgba(62, 242, 216, 0.35);
 
   --radius-md: 1.25rem;
   --radius-lg: 1.75rem;
@@ -48,6 +57,44 @@
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+// ---- light theme --------------------------------------------------------
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --bg: #f7f8fc;
+  --bg-elevated: #ffffff;
+  --bg-raise: #eef1f9;
+
+  --surface: rgba(20, 26, 51, 0.035);
+  --surface-strong: rgba(20, 26, 51, 0.065);
+  --border-soft: rgba(20, 26, 51, 0.1);
+  --border-glow: rgba(13, 148, 137, 0.4);
+  --stripe: rgba(20, 26, 51, 0.028);
+
+  --cyan: #0d9489;
+  --cyan-soft: #0a7b71;
+  --violet: #6a3ffb;
+  --violet-soft: #5227e0;
+  --magenta: #d1258f;
+  --amber: #c2760a;
+
+  --on-accent: #ffffff;
+
+  --text-hi: #11131c;
+  --text-mid: #4a5170;
+  --text-lo: #767f9c;
+
+  --grid-line: rgba(20, 26, 51, 0.055);
+  --glow-1: rgba(106, 63, 251, 0.12);
+  --glow-2: rgba(13, 148, 137, 0.12);
+  --glow-3: rgba(209, 37, 143, 0.09);
+
+  --logo-filter: grayscale(1) opacity(0.6);
+
+  --shadow-deep: 0 24px 60px -30px rgba(17, 19, 36, 0.18);
+  --shadow-glow: 0 0 0 1px var(--border-glow), 0 0 32px -10px rgba(13, 148, 137, 0.3);
 }
 
 * {
@@ -65,7 +112,7 @@ body {
 
 body {
   margin: 0;
-  background: var(--void-900);
+  background: var(--bg);
   color: var(--text-hi);
   font-family: var(--font-body);
   font-size: 16px;
@@ -73,13 +120,14 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  transition: background-color 0.4s ease, color 0.4s ease;
 
   // faint animated grid + aurora glow, fixed behind all content
   background-image:
-    radial-gradient(ellipse 60% 45% at 15% 0%, rgba(139, 107, 255, 0.22), transparent 60%),
-    radial-gradient(ellipse 55% 40% at 100% 15%, rgba(62, 242, 216, 0.16), transparent 60%),
-    radial-gradient(ellipse 50% 45% at 50% 100%, rgba(255, 79, 192, 0.12), transparent 60%),
-    linear-gradient(var(--void-900), var(--void-900));
+    radial-gradient(ellipse 60% 45% at 15% 0%, var(--glow-1), transparent 60%),
+    radial-gradient(ellipse 55% 40% at 100% 15%, var(--glow-2), transparent 60%),
+    radial-gradient(ellipse 50% 45% at 50% 100%, var(--glow-3), transparent 60%),
+    linear-gradient(var(--bg), var(--bg));
   background-attachment: fixed;
 }
 
@@ -118,7 +166,7 @@ video {
 
 ::selection {
   background: var(--violet);
-  color: var(--void-950);
+  color: var(--on-accent);
 }
 
 // ---- scrollbar ---------------------------------------------------------
@@ -127,13 +175,13 @@ video {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--void-950);
+  background: var(--bg);
 }
 
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(var(--cyan), var(--violet));
   border-radius: 999px;
-  border: 2px solid var(--void-950);
+  border: 2px solid var(--bg);
 }
 
 // ---- shared utility classes --------------------------------------------
@@ -189,7 +237,8 @@ video {
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   box-shadow: var(--shadow-deep);
-  transition: transform 0.5s var(--ease-out-expo), border-color 0.4s, box-shadow 0.4s;
+  transition: transform 0.5s var(--ease-out-expo), border-color 0.4s, box-shadow 0.4s,
+    background-color 0.4s;
 }
 
 .glass-panel--interactive:hover {
@@ -198,7 +247,7 @@ video {
 }
 
 .btn {
-  --btn-fg: var(--void-950);
+  --btn-fg: var(--on-accent);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -210,7 +259,8 @@ video {
   border-radius: 999px;
   cursor: pointer;
   border: 1px solid transparent;
-  transition: transform 0.35s var(--ease-spring), box-shadow 0.35s, filter 0.3s;
+  transition: transform 0.35s var(--ease-spring), box-shadow 0.35s, filter 0.3s,
+    background-color 0.3s, border-color 0.3s;
   will-change: transform;
 }
 
@@ -221,12 +271,12 @@ video {
 .btn-primary {
   background: var(--grad-aurora);
   color: var(--btn-fg);
-  box-shadow: 0 12px 40px -10px rgba(62, 242, 216, 0.55);
+  box-shadow: 0 12px 40px -10px color-mix(in srgb, var(--cyan) 55%, transparent);
 }
 
 .btn-primary:hover {
   filter: brightness(1.08);
-  box-shadow: 0 16px 50px -8px rgba(139, 107, 255, 0.6);
+  box-shadow: 0 16px 50px -8px color-mix(in srgb, var(--violet) 60%, transparent);
 }
 
 .btn-ghost {
@@ -306,7 +356,7 @@ video {
   border-radius: inherit;
   background: radial-gradient(
     280px circle at var(--glare-x, 50%) var(--glare-y, 50%),
-    rgba(255, 255, 255, 0.14),
+    color-mix(in srgb, var(--text-hi) 14%, transparent),
     transparent 60%
   );
   opacity: 0;

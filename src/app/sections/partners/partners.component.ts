@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RevealDirective } from '../../shared/reveal.directive';
-import { PARTNERS, PARTNER_LOGOS } from '../../shared/content';
+import { PARTNER_LOGOS } from '../../shared/content';
+import { I18nService } from '../../i18n/i18n.service';
 
 @Component({
   selector: 'app-partners',
@@ -12,7 +13,6 @@ import { PARTNERS, PARTNER_LOGOS } from '../../shared/content';
   host: { id: 'partners', class: 'section' },
 })
 export class PartnersComponent {
-  protected readonly partners = PARTNERS;
-  protected readonly logos = PARTNER_LOGOS;
+  protected readonly i18n = inject(I18nService);
   protected readonly marqueeLogos = [...PARTNER_LOGOS, ...PARTNER_LOGOS];
 }
