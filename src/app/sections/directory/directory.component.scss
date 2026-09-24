@@ -1,0 +1,41 @@
+.directory__panel {
+  padding: clamp(2.25rem, 2rem + 1.5vw, 3.75rem);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -40% -10% auto auto;
+    width: 22rem;
+    height: 22rem;
+    background: var(--grad-aurora-soft);
+    filter: blur(60px);
+    pointer-events: none;
+  }
+}
+
+.directory__copy {
+  position: relative;
+  max-width: 42rem;
+
+  p {
+    margin-top: 1.25rem;
+    font-size: 1rem;
+  }
+}
+
+.directory__categories {
+  display: grid;
+  gap: 0.6rem;
+  margin: 1.75rem 0 2rem;
+  font-size: 0.92rem;
+  color: var(--text-hi);
+
+  li {
+    padding: 0.6rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border-soft);
+    border-radius: 0.75rem;
+  }
+}

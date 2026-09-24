@@ -1,42 +1,40 @@
-# Astro & Tailwind CSS Starter Kit
+# ADN-SPACE
 
-## Template Integrations
-- @astrojs/tailwind - https://docs.astro.build/en/guides/integrations-guide/tailwind/
-- @astrojs/sitemap - https://docs.astro.build/en/guides/integrations-guide/sitemap/
+Marketing site for **ADN-SPACE** — a drone technology company from Karakalpakstan,
+Uzbekistan. Built with Angular's latest standalone + signals + zoneless model, a
+Three.js-powered 3D hero scene, and a dark neon "HUD" design system.
 
+## Stack
 
-## Template Structure
+- **Angular 20** — standalone components only (no NgModules), signals, the new
+  `@if`/`@for`/`@switch` control-flow syntax, and `provideZonelessChangeDetection()`.
+- **Three.js** — procedural low-poly drone + starfield rendered in the hero section.
+- **SCSS** — CSS custom properties for theming, glassmorphism, and animated gradients.
+- IntersectionObserver-driven scroll reveal + a lightweight pointer-tilt directive for
+  the card-based "unusual" motion design, no animation framework required.
 
-Inside of your Astro project, you'll see the following folders and files:
+## Project structure
 
 ```
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+src/
+├── app/
+│   ├── sections/     one folder per page section (hero, about, applications, …)
+│   ├── shared/        reusable directives, icon component, and page copy/content
+│   ├── app.ts          root component composing every section
+│   └── app.config.ts   application providers (zoneless change detection)
+├── styles.scss         design tokens + global styles
+└── index.html
+public/
+├── images/              site imagery (optimized: MP4/WebM for animated assets)
+└── favicons/
 ```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
 
 ## Commands
 
-All commands are run from the root of the project, from a terminal:
-
-| Command                | Action                                           |
-| :--------------------- | :----------------------------------------------- |
-| `npm install`          | Installs dependencies                            |
-| `npm run dev`          | Starts local dev server at `localhost:3000`      |
-| `npm run build`        | Build your production site to `./dist/`          |
-| `npm run preview`      | Preview your build locally, before deploying     |
-| `npm run astro ...`    | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro --help` | Get help using the Astro CLI                     |
-
-## Want to learn more?
-
-Feel free to check Astroäs [documentation](https://docs.astro.build)
+| Command           | Action                                        |
+| :----------------- | :-------------------------------------------- |
+| `npm install`      | Install dependencies                          |
+| `npm start`        | Start the dev server at `localhost:4200`      |
+| `npm run build`    | Production build to `./dist/adn-space`        |
+| `npm run watch`    | Development build in watch mode               |
+| `npm test`         | Run unit tests (Karma/Jasmine)                |

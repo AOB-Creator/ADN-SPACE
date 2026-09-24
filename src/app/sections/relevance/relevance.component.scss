@@ -1,0 +1,124 @@
+.relevance__grid {
+  display: grid;
+  gap: 3rem;
+}
+
+.relevance__intro {
+  p {
+    margin-top: 1.25rem;
+    font-size: 1rem;
+  }
+
+  img {
+    margin-top: 1.75rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-soft);
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+}
+
+.relevance__accordion {
+  display: grid;
+  gap: 1rem;
+}
+
+.relevance__item {
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  overflow: hidden;
+  transition: border-color 0.35s;
+}
+
+.relevance__item.is-open {
+  border-color: var(--border-glow);
+}
+
+.relevance__trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-hi);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  text-align: left;
+}
+
+.relevance__icon {
+  font-size: 1.3rem;
+}
+
+.relevance__trigger-title {
+  flex: 1;
+}
+
+.relevance__chevron {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-right: 2px solid var(--text-lo);
+  border-bottom: 2px solid var(--text-lo);
+  transform: rotate(45deg);
+  transition: transform 0.35s var(--ease-out-expo);
+}
+
+.is-open .relevance__chevron {
+  transform: rotate(-135deg);
+  border-color: var(--cyan-soft);
+}
+
+.relevance__panel {
+  padding: 0 1.5rem 1.5rem 3.25rem;
+  animation: relevance-open 0.4s var(--ease-out-expo);
+
+  p {
+    font-size: 0.92rem;
+  }
+
+  ul {
+    margin-top: 0.9rem;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  li {
+    position: relative;
+    padding-left: 1.1rem;
+    font-size: 0.88rem;
+    color: var(--text-mid);
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.55rem;
+      width: 0.4rem;
+      height: 0.4rem;
+      border-radius: 999px;
+      background: var(--grad-aurora);
+    }
+  }
+}
+
+@keyframes relevance-open {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (min-width: 960px) {
+  .relevance__grid {
+    grid-template-columns: 0.85fr 1.15fr;
+    align-items: start;
+  }
+}

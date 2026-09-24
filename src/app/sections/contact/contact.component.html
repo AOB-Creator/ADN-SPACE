@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="contact__panel glass-panel glass-panel--interactive" appReveal>
+    <div class="contact__copy">
+      <p class="eyebrow">Let's build the future</p>
+      <h2 class="section-title">
+        Ready to bring your <span class="gradient-text">drone mission to life?</span>
+      </h2>
+      <p>
+        Whether you're exploring a partnership, need a custom UAV platform, or want to talk
+        about the future of Central Asia's drone ecosystem — we'd love to hear from you.
+      </p>
+      <a class="btn btn-primary" href="mailto:business.alpamis@gmail.com">
+        <app-icon name="mail" />
+        business.alpamis&#64;gmail.com
+      </a>
+    </div>
+
+    <div class="contact__socials">
+      @for (link of links; track link.href) {
+        <a [href]="link.href" [target]="link.href.startsWith('http') ? '_blank' : null" rel="noopener" [attr.aria-label]="link.label">
+          <app-icon [name]="link.icon" />
+        </a>
+      }
+    </div>
+  </div>
+</div>

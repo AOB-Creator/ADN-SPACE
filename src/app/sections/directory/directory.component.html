@@ -1,0 +1,27 @@
+<div class="container">
+  <div class="directory__panel glass-panel glass-panel--interactive" appReveal>
+    <div class="directory__copy">
+      <p class="eyebrow">Directory</p>
+      <h2 class="section-title">
+        Explore the best <span class="gradient-text">drone companies</span> for your needs.
+      </h2>
+      <p>
+        Looking for reliable drone service providers? Whether you're planning a breathtaking
+        drone light show, need aerial photography, or require drone mapping and inspection
+        services — we've compiled a curated directory with services, pricing, and contact
+        information for each company.
+      </p>
+
+      <ul class="directory__categories">
+        @for (category of categories; track category) {
+          <li>{{ category }}</li>
+        }
+      </ul>
+
+      <a class="btn btn-primary" [href]="sheetUrl" target="_blank" rel="noopener">
+        Open drone companies list
+        <app-icon name="arrow-down" />
+      </a>
+    </div>
+  </div>
+</div>

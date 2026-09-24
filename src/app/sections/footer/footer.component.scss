@@ -1,0 +1,24 @@
+.footer {
+  border-top: 1px solid var(--border-soft);
+  padding-block: 2.5rem;
+}
+
+.footer__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.82rem;
+  color: var(--text-lo);
+}
+
+.footer__logo {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--text-hi);
+}
+
+.footer__by {
+  color: var(--text-lo);
+}

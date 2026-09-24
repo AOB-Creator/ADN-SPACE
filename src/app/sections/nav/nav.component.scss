@@ -1,0 +1,125 @@
+:host {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 50;
+}
+
+.nav {
+  padding-block: 1.4rem;
+  transition: padding 0.35s var(--ease-out-expo), background 0.35s, border-color 0.35s;
+  border-bottom: 1px solid transparent;
+}
+
+.nav--scrolled {
+  padding-block: 0.9rem;
+  background: rgba(5, 7, 15, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom-color: var(--border-soft);
+}
+
+.nav__bar {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav__logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  margin-right: auto;
+}
+
+.nav__logo-mark {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 999px;
+  background: var(--grad-aurora);
+  box-shadow: 0 0 14px var(--cyan);
+}
+
+.nav__links {
+  display: none;
+  gap: 1.8rem;
+  font-size: 0.9rem;
+  color: var(--text-mid);
+
+  a {
+    transition: color 0.25s;
+  }
+
+  a:hover {
+    color: var(--cyan-soft);
+  }
+}
+
+.nav__cta {
+  display: none;
+  padding: 0.6rem 1.35rem;
+  font-size: 0.85rem;
+}
+
+.nav__toggle {
+  display: grid;
+  place-items: center;
+  gap: 5px;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-soft);
+  background: var(--surface);
+  cursor: pointer;
+
+  span {
+    width: 1.1rem;
+    height: 2px;
+    background: var(--text-hi);
+    transition: transform 0.3s, opacity 0.3s;
+  }
+
+  &.is-open span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  &.is-open span:nth-child(2) {
+    opacity: 0;
+  }
+
+  &.is-open span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+}
+
+.nav__mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  padding: 1.5rem 1.5rem 2rem;
+  background: var(--void-800);
+  border-top: 1px solid var(--border-soft);
+  font-family: var(--font-display);
+
+  a {
+    padding-block: 0.3rem;
+  }
+}
+
+@media (min-width: 900px) {
+  .nav__links {
+    display: flex;
+  }
+
+  .nav__cta {
+    display: inline-flex;
+  }
+
+  .nav__toggle {
+    display: none;
+  }
+}
