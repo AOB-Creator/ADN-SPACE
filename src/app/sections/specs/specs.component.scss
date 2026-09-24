@@ -1,0 +1,86 @@
+.specs__grid {
+  display: grid;
+  gap: 2.5rem;
+}
+
+.specs__media {
+  overflow: hidden;
+  align-self: start;
+  position: sticky;
+  top: 6rem;
+
+  img,
+  video {
+    width: 100%;
+    object-fit: cover;
+  }
+}
+
+.specs__copy > p {
+  margin-top: 1.25rem;
+  font-size: 1rem;
+}
+
+.specs__diagram {
+  margin-top: 1.75rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-soft);
+}
+
+.specs__table-title {
+  margin-top: 2.25rem;
+  font-size: 1.15rem;
+}
+
+.specs__table-wrap {
+  margin-top: 1.25rem;
+  overflow-x: auto;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+}
+
+.specs__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+
+  th {
+    text-align: left;
+    padding: 0.9rem 1.2rem;
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--void-950);
+    background: var(--grad-aurora);
+  }
+
+  td {
+    padding: 1rem 1.2rem;
+    border-top: 1px solid var(--border-soft);
+    color: var(--text-mid);
+  }
+
+  td:first-child {
+    color: var(--text-hi);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  tbody tr:hover {
+    background: var(--surface);
+  }
+}
+
+@media (min-width: 960px) {
+  .specs__grid {
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: 3.5rem;
+  }
+}
+
+@media (max-width: 959px) {
+  .specs__media {
+    position: static;
+  }
+}

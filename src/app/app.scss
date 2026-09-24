@@ -1,0 +1,33 @@
+:host {
+  display: block;
+}
+
+.skip-link {
+  position: absolute;
+  top: -3rem;
+  left: 1rem;
+  z-index: 100;
+  padding: 0.6rem 1rem;
+  border-radius: 0.5rem;
+  background: var(--void-800);
+  color: var(--text-hi);
+  transition: top 0.25s;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+main {
+  display: block;
+
+  & > *:nth-of-type(even) {
+    background: linear-gradient(
+      180deg,
+      transparent,
+      rgba(255, 255, 255, 0.02) 20%,
+      rgba(255, 255, 255, 0.02) 80%,
+      transparent
+    );
+  }
+}

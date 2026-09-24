@@ -1,0 +1,41 @@
+<div class="container relevance__grid">
+  <div class="relevance__intro" appReveal>
+    <p class="eyebrow">Why it matters</p>
+    <h2 class="section-title">
+      The relevance of drone <span class="gradient-text">development in Uzbekistan.</span>
+    </h2>
+    <p>
+      From agricultural modernization to border security and smart cities — UAV technology
+      touches nearly every strategic priority on Uzbekistan's national agenda.
+    </p>
+    <img src="/images/dronetheme.jpg" alt="Drone over Uzbekistan landscape" loading="lazy" />
+  </div>
+
+  <div class="relevance__accordion" [appReveal]="120">
+    @for (section of sections; track section.title; let i = $index) {
+      <div class="relevance__item" [class.is-open]="activeIndex() === i">
+        <button
+          class="relevance__trigger"
+          type="button"
+          (click)="select(i)"
+          [attr.aria-expanded]="activeIndex() === i"
+        >
+          <span class="relevance__icon">{{ section.icon }}</span>
+          <span class="relevance__trigger-title">{{ section.title }}</span>
+          <span class="relevance__chevron" aria-hidden="true"></span>
+        </button>
+
+        @if (activeIndex() === i) {
+          <div class="relevance__panel">
+            <p>{{ section.intro }}</p>
+            <ul>
+              @for (point of section.points; track point) {
+                <li>{{ point }}</li>
+              }
+            </ul>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

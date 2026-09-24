@@ -1,0 +1,22 @@
+<div class="container">
+  <div class="applications__head" appReveal>
+    <p class="eyebrow">Drone applications</p>
+    <h2 class="section-title">
+      One airframe platform, <span class="gradient-text">six mission profiles.</span>
+    </h2>
+  </div>
+
+  <div class="applications__grid">
+    @for (app of applications; track app.title; let i = $index) {
+      <article
+        class="applications__card glass-panel glass-panel--interactive"
+        [appReveal]="i * 80"
+        [appTilt]="8"
+      >
+        <span class="applications__icon">{{ app.icon }}</span>
+        <h3>{{ app.title }}</h3>
+        <p>{{ app.description }}</p>
+      </article>
+    }
+  </div>
+</div>

@@ -1,0 +1,48 @@
+<div class="container specs__grid">
+  <div class="specs__media glass-panel" appReveal>
+    <video autoplay muted loop playsinline preload="auto" aria-label="Drone hardware animation">
+      <source src="/images/animation_drone1.webm" type="video/webm" />
+      <source src="/images/animation_drone1.mp4" type="video/mp4" />
+    </video>
+  </div>
+
+  <div class="specs__copy" [appReveal]="120">
+    <p class="eyebrow">Drone hardware & software</p>
+    <h2 class="section-title">
+      Inside the drone: <span class="gradient-text">specs, components & code.</span>
+    </h2>
+    <p>
+      Drones are complex aerial systems that combine advanced hardware, software, and
+      firmware to achieve flight, autonomy, data capture, and synchronization. Here's a
+      breakdown of the core components of modern drones — from mechanical parts to
+      processors and coding frameworks.
+    </p>
+
+    <img
+      class="specs__diagram"
+      src="/images/drone7.png"
+      alt="Drone component diagram"
+      loading="lazy"
+    />
+
+    <h3 class="specs__table-title">Drone models & technical specifications</h3>
+    <div class="specs__table-wrap">
+      <table class="specs__table">
+        <thead>
+          <tr>
+            <th>Drone model</th>
+            <th>Specs & tech summary</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (spec of specs; track spec.model) {
+            <tr>
+              <td>{{ spec.model }}</td>
+              <td>{{ spec.specs }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

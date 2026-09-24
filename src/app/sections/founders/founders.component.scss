@@ -1,0 +1,37 @@
+.founders__head {
+  max-width: 36rem;
+  margin-bottom: 3rem;
+}
+
+.founders__grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  max-width: 42rem;
+}
+
+.founders__card {
+  padding: 2.25rem 1.75rem;
+  text-align: center;
+
+  img {
+    width: 7rem;
+    height: 7rem;
+    margin-inline: auto;
+    border-radius: 999px;
+    object-fit: cover;
+    border: 2px solid var(--border-glow);
+    box-shadow: var(--shadow-glow);
+  }
+
+  h3 {
+    margin-top: 1.25rem;
+    font-size: 1.05rem;
+  }
+
+  p {
+    margin-top: 0.3rem;
+    font-size: 0.85rem;
+    color: var(--cyan-soft);
+  }
+}

@@ -1,0 +1,38 @@
+<header class="nav" [class.nav--scrolled]="scrolled()">
+  <div class="container nav__bar">
+    <a href="#top" class="nav__logo">
+      <span class="nav__logo-mark" aria-hidden="true"></span>
+      ADN&#8209;SPACE
+    </a>
+
+    <nav class="nav__links">
+      @for (link of links; track link.href) {
+        <a [href]="link.href">{{ link.label }}</a>
+      }
+    </nav>
+
+    <a class="btn btn-primary nav__cta" href="#contact">Contact us</a>
+
+    <button
+      class="nav__toggle"
+      type="button"
+      [class.is-open]="menuOpen()"
+      (click)="toggleMenu()"
+      [attr.aria-expanded]="menuOpen()"
+      aria-label="Toggle navigation menu"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+
+  @if (menuOpen()) {
+    <nav class="nav__mobile" (click)="closeMenu()">
+      @for (link of links; track link.href) {
+        <a [href]="link.href">{{ link.label }}</a>
+      }
+      <a class="btn btn-primary" href="#contact">Contact us</a>
+    </nav>
+  }
+</header>

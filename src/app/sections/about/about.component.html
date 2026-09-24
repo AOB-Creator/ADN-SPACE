@@ -1,0 +1,49 @@
+<div class="container about__grid">
+  <div class="about__copy" appReveal>
+    <p class="eyebrow">About ADN&#8209;SPACE</p>
+    <h2 class="section-title">
+      A pioneering drone company, <span class="gradient-text">born from student ambition.</span>
+    </h2>
+    <p class="about__lede">
+      ADN‑SPACE is a pioneering drone technology company born in the heart of
+      Karakalpakstan, inspired by <strong>President Shavkat Mirziyoyev's</strong> vision of
+      building a New Uzbekistan led by innovation, youth, and technology.
+    </p>
+    <p>
+      Founded in 2024 by a team of passionate students, ADN‑SPACE designs, manufactures,
+      and customizes drones tailored for high‑impact sectors — from firefighting and
+      agriculture to smart cities and aerial logistics. Backed by our research center,
+      ADN‑SPACE LABORATORY, we push the boundaries of Unmanned Aerial Systems (UAS) and
+      automation, aligned with the "Uzbekistan – 2030" strategy for digital transformation
+      and youth entrepreneurship.
+    </p>
+
+    <ul class="about__facts">
+      @for (fact of facts; track fact.label) {
+        <li>
+          <span class="about__fact-label">{{ fact.label }}</span>
+          <span class="about__fact-value">{{ fact.value }}</span>
+        </li>
+      }
+    </ul>
+  </div>
+
+  <div class="about__stats" [appReveal]="120">
+    <div class="glass-panel glass-panel--interactive about__stat-card">
+      <app-counter [value]="2024" [suffix]="''" />
+      <p>Year founded</p>
+    </div>
+    <div class="glass-panel glass-panel--interactive about__stat-card">
+      <app-counter [value]="15" suffix=" km" />
+      <p>Maximum flight range</p>
+    </div>
+    <div class="glass-panel glass-panel--interactive about__stat-card">
+      <app-counter [value]="55" suffix=" min" />
+      <p>Peak flight endurance</p>
+    </div>
+    <div class="glass-panel glass-panel--interactive about__stat-card">
+      <app-counter [value]="6" suffix="+" />
+      <p>Industries served</p>
+    </div>
+  </div>
+</div>

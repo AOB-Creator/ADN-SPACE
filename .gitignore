@@ -1,5 +1,7 @@
 # build output
 dist/
+/.angular/cache
+/out-tsc
 
 # dependencies
 node_modules/
