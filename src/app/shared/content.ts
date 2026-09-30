@@ -14,11 +14,11 @@ export const PARTNER_LOGOS = [
 ];
 
 /** Matches the order of `decrees.items` in each locale file. */
-export const DECREE_ACCENTS: ('cyan' | 'violet' | 'magenta' | 'amber')[] = [
-  'cyan',
-  'violet',
-  'amber',
-  'magenta',
+export const DECREE_ACCENTS: ('accent' | 'success' | 'danger' | 'warning')[] = [
+  'accent',
+  'success',
+  'warning',
+  'danger',
 ];
 
 /** Matches the order of `founders.items` in each locale file. */

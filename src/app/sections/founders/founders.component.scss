@@ -20,8 +20,7 @@
     margin-inline: auto;
     border-radius: 999px;
     object-fit: cover;
-    border: 2px solid var(--border-glow);
-    box-shadow: var(--shadow-glow);
+    border: 2px solid var(--border-soft);
   }
 
   h3 {
@@ -32,6 +31,6 @@
   p {
     margin-top: 0.3rem;
     font-size: 0.85rem;
-    color: var(--cyan-soft);
+    color: var(--accent);
   }
 }
