@@ -1,0 +1,154 @@
+@let t = i18n.a();
+@let s = summary();
+
+<header class="head">
+  <div>
+    <h2>{{ t.analytics.title }}</h2>
+    <p>{{ t.analytics.subtitle }}</p>
+  </div>
+  <span class="pill"><span class="live" [class.on]="sim.running()"></span>{{ i18n.time(sim.clock()) }} · {{ sim.running() ? t.live.on : t.live.off }}</span>
+</header>
+
+<section class="kpis">
+  <div class="kpi panel">
+    <span><app-icon name="package" />{{ t.analytics.deliveriesToday }}</span>
+    <b class="num">{{ s.delivered }}</b>
+  </div>
+  <div class="kpi panel">
+    <span><app-icon name="check-circle" />{{ t.overview.onTimeRate }}</span>
+    <b class="num">{{ (s.onTime * 100).toFixed(1) }}<small>%</small></b>
+  </div>
+  <div class="kpi panel">
+    <span><app-icon name="clock" />{{ t.overview.avgDelivery }}</span>
+    <b class="num">{{ i18n.duration(s.avg) }}</b>
+  </div>
+  <div class="kpi panel">
+    <span><app-icon name="drone" />{{ t.analytics.utilization }}</span>
+    <b class="num">{{ (s.utilization * 100).toFixed(0) }}<small>%</small></b>
+  </div>
+  <div class="kpi panel">
+    <span><app-icon name="route" />{{ t.analytics.avgDistance }}</span>
+    <b class="num">{{ s.distance.toFixed(1) }}<small> {{ t.units.km }}</small></b>
+  </div>
+</section>
+
+<section class="charts">
+  <figure class="chart panel chart--wide">
+    <figcaption class="panel__head">
+      <h3>{{ t.analytics.deliveriesPerHour }}</h3>
+      <span class="legend">
+        <i class="sw sw--ok"></i>{{ t.notes.onTime }}
+        <i class="sw sw--late"></i>{{ t.notes.delayed }}
+      </span>
+    </figcaption>
+    @let b = bars();
+    <svg [attr.viewBox]="'0 0 ' + W + ' ' + H" role="img" [attr.aria-label]="t.analytics.deliveriesPerHour">
+      @for (tk of b.ticks; track tk.v) {
+        <line class="grid" [attr.x1]="M.l" [attr.x2]="W - M.r" [attr.y1]="tk.y" [attr.y2]="tk.y" />
+        <text class="axis" [attr.x]="M.l - 8" [attr.y]="tk.y + 4" text-anchor="end">{{ tk.v }}</text>
+      }
+      @for (it of b.items; track it.label) {
+        <g class="bar" [class.bar--now]="it.current">
+          <rect class="bar__ok" [attr.x]="it.x" [attr.y]="it.onTime.y" [attr.width]="it.w" [attr.height]="it.onTime.h" rx="3" />
+          @if (it.late.h > 0) {
+            <rect class="bar__late" [attr.x]="it.x" [attr.y]="it.late.y" [attr.width]="it.w" [attr.height]="it.late.h - 1.5" rx="3" />
+          }
+          <text class="axis" [attr.x]="it.cx" [attr.y]="H - 8" text-anchor="middle">{{ it.label }}</text>
+          <text class="bar__value" [attr.x]="it.cx" [attr.y]="it.late.y - 6" text-anchor="middle">{{ it.total }}</text>
+        </g>
+      }
+    </svg>
+  </figure>
+
+  <figure class="chart panel">
+    <figcaption class="panel__head">
+      <h3>{{ t.analytics.fleetStatus }}</h3>
+    </figcaption>
+    @let dn = donut();
+    <div class="donut">
+      <svg viewBox="0 0 140 140" role="img" [attr.aria-label]="t.analytics.fleetStatus">
+        <circle cx="70" cy="70" [attr.r]="dn.r" class="donut__track" />
+        @for (p of dn.parts; track p.key) {
+          <circle cx="70" cy="70" [attr.r]="dn.r" [attr.class]="'donut__seg donut__seg--' + p.cls" [attr.stroke-dasharray]="p.dash" [attr.stroke-dashoffset]="p.offset" />
+        }
+        <text x="70" y="68" text-anchor="middle" class="donut__total">{{ dn.total }}</text>
+        <text x="70" y="86" text-anchor="middle" class="donut__label">{{ t.overview.drones }}</text>
+      </svg>
+      <ul class="donut__legend">
+        @for (p of dn.parts; track p.key) {
+          <li>
+            <a routerLink="/fleet"><i [attr.class]="'sw sw--' + p.cls"></i>{{ t.fleet.tabs[p.key] }}</a>
+            <b class="num">{{ p.v }}</b>
+          </li>
+        }
+      </ul>
+    </div>
+  </figure>
+
+  <figure class="chart panel chart--wide">
+    <figcaption class="panel__head">
+      <h3>{{ t.analytics.onTimeTrend }}</h3>
+      <span class="pill num">{{ (trend().last.rate * 100).toFixed(1) }}%</span>
+    </figcaption>
+    @let tr = trend();
+    <svg [attr.viewBox]="'0 0 ' + W + ' ' + H" role="img" [attr.aria-label]="t.analytics.onTimeTrend">
+      <defs>
+        <linearGradient id="trend-fill" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" class="trend__stop" stop-opacity="0.22" />
+          <stop offset="1" class="trend__stop" stop-opacity="0" />
+        </linearGradient>
+      </defs>
+      @for (tk of tr.ticks; track tk.v) {
+        <line class="grid" [attr.x1]="M.l" [attr.x2]="W - M.r" [attr.y1]="tk.y" [attr.y2]="tk.y" />
+        <text class="axis" [attr.x]="M.l - 8" [attr.y]="tk.y + 4" text-anchor="end">{{ tk.v * 100 }}%</text>
+      }
+      <path [attr.d]="tr.area" fill="url(#trend-fill)" />
+      <path [attr.d]="tr.line" class="trend__line" />
+      @for (p of tr.pts; track p.label) {
+        <circle [attr.cx]="p.x" [attr.cy]="p.y" r="3.2" class="trend__dot" />
+        <text class="axis" [attr.x]="p.x" [attr.y]="H - 8" text-anchor="middle">{{ p.label }}</text>
+      }
+    </svg>
+  </figure>
+
+  <figure class="chart panel">
+    <figcaption class="panel__head">
+      <h3>{{ t.analytics.byWarehouse }}</h3>
+    </figcaption>
+    <ul class="hubs">
+      @for (h of hubs(); track h.id) {
+        <li>
+          <span class="hubs__name"><b>{{ h.id }}</b> {{ h.name }}</span>
+          <span class="hubs__bar">
+            <i class="hubs__done" [style.width.%]="h.donePct"></i>
+            <i class="hubs__live" [style.width.%]="h.livePct"></i>
+          </span>
+          <span class="hubs__val num">{{ h.done }} <small>+{{ h.live }}</small></span>
+        </li>
+      }
+    </ul>
+    <p class="legend legend--foot">
+      <i class="sw sw--accent"></i>{{ t.missionStatus.delivered }}
+      <i class="sw sw--soft"></i>{{ t.droneStatus.inFlight }}
+    </p>
+  </figure>
+
+  <figure class="chart panel chart--full">
+    <figcaption class="panel__head">
+      <h3>{{ t.analytics.batteryLevels }}</h3>
+      <span class="legend">
+        <i class="sw sw--success"></i>≥ 50%
+        <i class="sw sw--warning"></i>20–50%
+        <i class="sw sw--danger"></i>&lt; 20%
+      </span>
+    </figcaption>
+    <div class="batteries">
+      @for (b of batteries(); track b.id) {
+        <a class="batt" [routerLink]="['/fleet', b.id]" [attr.title]="b.id + ' · ' + b.v.toFixed(0) + '%'">
+          <span class="batt__track"><i [attr.data-level]="b.level" [style.height.%]="b.v"></i></span>
+          <small class="num">{{ b.v.toFixed(0) }}</small>
+        </a>
+      }
+    </div>
+  </figure>
+</section>

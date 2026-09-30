@@ -1,0 +1,207 @@
+@let t = i18n.a();
+@let m = selected();
+@let d = drone();
+@let tel = telemetry();
+
+<aside class="ops">
+  <header class="ops__head">
+    <h2>{{ i18n.f(t.missions.operations, { n: operations().length }) }}</h2>
+    <a class="btn-sm btn-sm--primary" routerLink="/orders" [queryParams]="{ new: 1 }">
+      <app-icon name="plus" />{{ t.missions.newMission }}
+    </a>
+  </header>
+
+  <div class="ops__list scroll-y">
+    @for (op of operations(); track op.id) {
+      @let od = droneOf(op);
+      @let origin = originNote(op);
+      <article class="op" [class.op--on]="op.id === selectedId()" (click)="select(op)">
+        <header class="op__top">
+          <img [src]="od?.thumb ?? 'images/drones/cargo.png'" alt="" width="56" height="42" />
+          <div class="op__id">
+            <b>{{ od?.id ?? op.orderId }}</b>
+            <small>{{ op.id }} · {{ sim.order(op.orderId)?.customer }}</small>
+          </div>
+          <a class="op__icon" [routerLink]="['/orders', op.orderId]" (click)="$event.stopPropagation()" [attr.aria-label]="t.missions.actions.viewOrder">
+            <app-icon name="arrow-up-right" />
+          </a>
+          <div class="op__menu">
+            <button type="button" class="op__icon" (click)="toggleMenu($event, op.id)" aria-label="More" [attr.aria-expanded]="menuFor() === op.id">
+              <app-icon name="dots" />
+            </button>
+            @if (menuFor() === op.id) {
+              <div class="menu" (click)="$event.stopPropagation()">
+                <button type="button" (click)="select(op)"><app-icon name="crosshair" />{{ t.missions.actions.track }}</button>
+                @if (op.droneId) {
+                  <a [routerLink]="['/fleet', op.droneId]"><app-icon name="drone" />{{ t.missions.actions.openFleet }}</a>
+                }
+                <a [routerLink]="['/orders', op.orderId]"><app-icon name="package" />{{ t.missions.actions.viewOrder }}</a>
+                @if (op.droneId) {
+                  <button type="button" class="danger" (click)="returnToBase(op)"><app-icon name="refresh" />{{ t.missions.actions.returnToBase }}</button>
+                }
+              </div>
+            }
+          </div>
+        </header>
+
+        <div class="op__status">
+          <app-status [tone]="missionTone(op)">{{ t.missionStatus[op.status] }}</app-status>
+          @if (od) {
+            <app-battery [value]="od.battery" />
+          }
+        </div>
+
+        <app-route-track [progress]="progress(op)" />
+
+        <div class="op__ends">
+          <div>
+            <small>{{ sim.warehouseLabel(op.originId) }}</small>
+            <b class="num">{{ i18n.time(startTime(op)) }}</b>
+            <span [attr.data-tone]="origin.tone">{{ t.notes[origin.key] }}</span>
+          </div>
+          <div class="op__end">
+            <small>{{ op.destination.label }}</small>
+            <b class="num">{{ op.status === 'scheduled' ? '—' : i18n.time(etaTime(op)) }}</b>
+            @if (op.status !== 'scheduled') {
+              <span [attr.data-tone]="destinationTone(op)">{{ i18n.delta(op.delay) }}</span>
+            }
+          </div>
+        </div>
+      </article>
+    } @empty {
+      <p class="ops__empty">{{ t.missions.empty }}</p>
+    }
+  </div>
+</aside>
+
+<section class="stage">
+  @if (ui.missionView() === '3d' && d) {
+    <app-city-view class="stage__view" mode="follow" [droneId]="d.id" />
+  } @else {
+    <app-street-map
+      class="stage__view"
+      [missionId]="selectedId()"
+      [(follow)]="follow"
+      [insets]="mapInsets()"
+      (droneSelect)="selectDrone($event)"
+    />
+  }
+
+  <div class="stage__tools">
+    <div class="seg">
+      <button type="button" [class.on]="ui.missionView() === 'map'" (click)="ui.missionView.set('map')"><app-icon name="map" />{{ t.missions.mapView }}</button>
+      <button type="button" [class.on]="ui.missionView() === '3d'" (click)="ui.missionView.set('3d')"><app-icon name="cube" />{{ t.missions.view3d }}</button>
+    </div>
+    @if (ui.missionView() === 'map') {
+      <div class="tool-group">
+        <button type="button" class="icon-btn" (click)="map()?.zoomBy(1.3)" [attr.aria-label]="t.overview.zoomIn"><app-icon name="plus" /></button>
+        <button type="button" class="icon-btn" (click)="map()?.zoomBy(0.77)" [attr.aria-label]="t.overview.zoomOut"><app-icon name="minus" /></button>
+        <button type="button" class="icon-btn" [class.is-on]="follow()" (click)="follow.set(!follow())" [attr.aria-label]="t.missions.follow" [attr.title]="t.missions.follow"><app-icon name="crosshair" /></button>
+        <button type="button" class="icon-btn" (click)="follow.set(false); map()?.fitRoute()" [attr.aria-label]="t.overview.resetView" [attr.title]="t.overview.resetView"><app-icon name="maximize" /></button>
+      </div>
+    }
+  </div>
+
+  @if (m) {
+    <div class="info" [class.info--closed]="!sheetOpen()">
+      <button type="button" class="info__grab" (click)="sheetOpen.set(!sheetOpen())" aria-label="Toggle details"><i></i></button>
+      <header class="info__head">
+        <img [src]="d?.thumb ?? 'images/drones/cargo.png'" alt="" width="64" height="48" />
+        <div>
+          <b>{{ d?.id ?? m.orderId }}</b>
+          <app-status [tone]="missionTone(m)">{{ t.missionStatus[m.status] }}</app-status>
+        </div>
+        @if (d) {
+          <app-battery [value]="d.battery" />
+        }
+      </header>
+
+      <div class="info__body">
+        @if (d && onMission()) {
+          <app-payload [value]="d.payload" [max]="d.payloadMax" [large]="true" />
+        } @else if (sim.order(m.orderId); as o) {
+          <app-payload [value]="o.weight" [max]="d?.payloadMax ?? 2.5" [large]="true" />
+        }
+
+        <div class="info__grid">
+          <div>
+            <small>{{ t.missions.distance }}</small>
+            <b class="num">{{ onMission() ? remainingKm(m) : '0.0' }} <span>{{ t.units.km }}</span></b>
+          </div>
+          <div>
+            <small>{{ t.missions.eta }}</small>
+            <b class="num">{{ m.status === 'scheduled' ? '—' : i18n.time(etaTime(m)) }}</b>
+            @if (m.status !== 'scheduled') {
+              <em [attr.data-tone]="destinationTone(m)">{{ i18n.delta(m.delay) }}</em>
+            }
+          </div>
+        </div>
+
+        <div class="info__route">
+          <app-route-track [progress]="progress(m)" />
+          <div class="info__ends">
+            <span>{{ m.originId }}</span>
+            <span>{{ m.destination.label }}</span>
+          </div>
+        </div>
+
+        @if (tel && mobile()) {
+          <div class="chips">
+            <span><small>{{ t.missions.telemetry.alt }}</small><b class="num">{{ tel.alt.toFixed(0) }} m</b></span>
+            <span><small>{{ t.missions.telemetry.spd }}</small><b class="num">{{ tel.spd.toFixed(0) }}</b></span>
+            <span><small>{{ t.missions.telemetry.pwr }}</small><b class="num">{{ tel.pwr.toFixed(0) }}%</b></span>
+            <span><small>{{ t.missions.telemetry.hdg }}</small><b class="num">{{ tel.heading.toFixed(0) }}°</b></span>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  @if (tel && !mobile()) {
+    <div class="telemetry">
+      <div class="tiles">
+        <div class="tile">
+          <small>{{ t.missions.telemetry.alt }}</small>
+          <b class="num">{{ tel.alt.toFixed(0) }}<span>m</span></b>
+          <svg viewBox="0 0 100 30" preserveAspectRatio="none"><path [attr.d]="spark('alt', 150)" /></svg>
+        </div>
+        <div class="tile">
+          <small>{{ t.missions.telemetry.wgh }}</small>
+          <b class="num">{{ tel.wgh.toFixed(1) }}<span>{{ t.units.kg }}</span></b>
+          <svg viewBox="0 0 100 30" preserveAspectRatio="none"><path [attr.d]="spark('wgh', 5)" /></svg>
+        </div>
+        <div class="tile">
+          <small>{{ t.missions.telemetry.spd }}</small>
+          <b class="num">{{ tel.spd.toFixed(0) }}<span>{{ t.units.kmh }}</span></b>
+          <svg viewBox="0 0 100 30" preserveAspectRatio="none"><path [attr.d]="spark('spd', 72)" /></svg>
+        </div>
+        <div class="tile">
+          <small>{{ t.missions.telemetry.pwr }}</small>
+          <b class="num" [attr.data-low]="tel.pwr < 20">{{ tel.pwr.toFixed(0) }}<span>%</span></b>
+          <svg viewBox="0 0 100 30" preserveAspectRatio="none"><path [attr.d]="spark('pwr', 100)" /></svg>
+        </div>
+      </div>
+      <div class="tiles">
+        <div class="tile tile--gauge">
+          <small>{{ t.missions.telemetry.hdg }}</small>
+          <app-attitude [pitch]="tel.pitch" [roll]="tel.roll" />
+          <b class="num">{{ tel.roll.toFixed(0) }}° · {{ tel.pitch.toFixed(0) }}°</b>
+        </div>
+        <div class="tile tile--gauge">
+          <small>{{ t.missions.telemetry.cmp }}</small>
+          <app-compass [heading]="tel.heading" />
+          <b class="num">{{ cardinal(tel.heading) }} {{ tel.heading.toFixed(0) }}°</b>
+        </div>
+      </div>
+      @if (d && (d.status === 'flying' || d.status === 'returning')) {
+        <div class="feed">
+          <app-city-view mode="pov" [droneId]="d.id" />
+          <span class="feed__rec"><i></i>{{ t.missions.rec }}</span>
+          <span class="feed__label">{{ t.missions.liveFeed }} · {{ d.id }}</span>
+          <span class="feed__time num">{{ i18n.time(sim.clock()) }}</span>
+          <span class="feed__cross"></span>
+        </div>
+      }
+    </div>
+  }
+</section>

@@ -1,4 +1,5 @@
 import { Translations } from './translations';
+import { enApp } from './app/en';
 
 export const en: Translations = {
   meta: {
@@ -273,4 +274,5 @@ export const en: Translations = {
   language: {
     label: 'Language',
   },
+  app: enApp,
 };

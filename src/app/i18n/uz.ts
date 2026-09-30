@@ -1,4 +1,5 @@
 import { Translations } from './translations';
+import { uzApp } from './app/uz';
 
 export const uz: Translations = {
   meta: {
@@ -273,4 +274,5 @@ export const uz: Translations = {
   language: {
     label: 'Til',
   },
+  app: uzApp,
 };

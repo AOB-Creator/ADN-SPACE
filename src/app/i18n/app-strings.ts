@@ -1,0 +1,171 @@
+/** Copy for the operations dashboard (shell + app pages). Templates use {placeholders}. */
+export interface AppStrings {
+  nav: {
+    overview: string;
+    missions: string;
+    orders: string;
+    fleet: string;
+    analytics: string;
+    company: string;
+    settings: string;
+    more: string;
+    map: string;
+  };
+  search: {
+    placeholder: string;
+    empty: string;
+    drones: string;
+    missions: string;
+    orders: string;
+    addresses: string;
+  };
+  live: { on: string; off: string; demo: string };
+  notifications: {
+    title: string;
+    markAllRead: string;
+    empty: string;
+    kinds: Record<
+      'deviation' | 'battery' | 'delivered' | 'offline' | 'returning' | 'reassigned' | 'cancelled' | 'registered',
+      { title: string; body: string }
+    >;
+  };
+  user: { role: string; darkMode: string; language: string };
+  droneStatus: { flying: string; returning: string; idle: string; charging: string; maintenance: string; inFlight: string };
+  missionStatus: {
+    flying: string;
+    deviation: string;
+    lowBattery: string;
+    delivered: string;
+    scheduled: string;
+    cancelled: string;
+  };
+  orderStatus: { inFlight: string; scheduled: string; delivered: string; cancelled: string };
+  notes: { onTime: string; delayed: string; rerouting: string; waiting: string };
+  signal: { good: string; fair: string; weak: string };
+  units: { min: string; h: string; m: string; km: string; kmh: string; kg: string; s: string };
+  overview: {
+    activeDrones: string;
+    inFlight: string;
+    avgDelivery: string;
+    onTimeRate: string;
+    drones: string;
+    online: string;
+    activeRoutes: string;
+    today: string;
+    notifications: string;
+    layers: { viewAll: string; aerial: string; routes: string; weather: string; drones: string; zones: string };
+    zoomIn: string;
+    zoomOut: string;
+    fullscreen: string;
+    resetView: string;
+    weather: string;
+  };
+  missions: {
+    operations: string;
+    newMission: string;
+    distance: string;
+    eta: string;
+    empty: string;
+    back: string;
+    liveFeed: string;
+    rec: string;
+    mapView: string;
+    view3d: string;
+    follow: string;
+    telemetry: { alt: string; wgh: string; spd: string; pwr: string; hdg: string; cmp: string };
+    actions: { track: string; openFleet: string; viewOrder: string; returnToBase: string };
+  };
+  fleet: {
+    tabs: { all: string; flying: string; idle: string; charging: string; maintenance: string };
+    filter: string;
+    allModels: string;
+    register: string;
+    registerTitle: string;
+    model: string;
+    color: string;
+    white: string;
+    black: string;
+    home: string;
+    submit: string;
+    cancel: string;
+    inFlight: string;
+    serial: string;
+    maxAlt: string;
+    maxSpeed: string;
+    flightTime: string;
+    gps: string;
+    flightHours: string;
+    payloadRated: string;
+    certification: string;
+    valid: string;
+    expiring: string;
+    daysLeft: string;
+    max: string;
+    returnToBase: string;
+    takeOffline: string;
+    bringOnline: string;
+    dragToRotate: string;
+    empty: string;
+  };
+  orders: {
+    title: string;
+    newOrder: string;
+    tabs: { all: string; active: string; delivered: string; cancelled: string };
+    requestedAt: string;
+    customer: string;
+    pickup: string;
+    dropoff: string;
+    package: string;
+    priority: string;
+    express: string;
+    standard: string;
+    status: string;
+    drone: string;
+    unassigned: string;
+    hub: string;
+    reassign: string;
+    reschedule: string;
+    cancel: string;
+    reassignTitle: string;
+    noIdle: string;
+    rescheduleTitle: string;
+    inMinutes: string;
+    confirm: string;
+    cancelTitle: string;
+    cancelBody: string;
+    keep: string;
+    newTitle: string;
+    weight: string;
+    create: string;
+    trackMission: string;
+    empty: string;
+  };
+  analytics: {
+    title: string;
+    subtitle: string;
+    deliveriesToday: string;
+    utilization: string;
+    avgDistance: string;
+    deliveriesPerHour: string;
+    fleetStatus: string;
+    batteryLevels: string;
+    onTimeTrend: string;
+    byWarehouse: string;
+    last12h: string;
+  };
+  settings: {
+    title: string;
+    appearance: string;
+    theme: string;
+    light: string;
+    dark: string;
+    language: string;
+    simulation: string;
+    speed: string;
+    live: string;
+    liveHint: string;
+    about: string;
+    aboutBody: string;
+  };
+  company: { title: string; subtitle: string };
+}

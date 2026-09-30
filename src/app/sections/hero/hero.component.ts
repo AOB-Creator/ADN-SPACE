@@ -10,6 +10,7 @@ import {
   inject,
   viewChild,
 } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { DroneScene } from './drone-scene';
 import { I18nService } from '../../i18n/i18n.service';
 import { ThemeService } from '../../shared/theme.service';
@@ -17,6 +18,7 @@ import { ThemeService } from '../../shared/theme.service';
 @Component({
   selector: 'app-hero',
   standalone: true,
+  imports: [RouterLink],
   templateUrl: './hero.component.html',
   styleUrl: './hero.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

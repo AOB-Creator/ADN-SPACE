@@ -1,0 +1,145 @@
+@let t = i18n.a();
+@let k = sim.kpis();
+@let c = sim.counts();
+
+<section class="stage" #stage>
+  <canvas #canvas class="stage__canvas" aria-label="3D city map with live drone positions"></canvas>
+  <div class="tags" #tags></div>
+
+  <div class="clock">
+    <span class="clock__live" [class.on]="sim.running()"></span>
+    <b class="num">{{ i18n.time(sim.clock()) }}</b>
+    <span>Nukus</span>
+    @if (ui.layers().weather) {
+      <span class="clock__wx"><app-icon name="cloud" />{{ t.overview.weather }}</span>
+    }
+  </div>
+
+  <div class="layers" [class.open]="layersOpen()">
+    <button type="button" class="layers__toggle icon-btn" (click)="layersOpen.set(!layersOpen())" [attr.aria-expanded]="layersOpen()" aria-label="Layers">
+      <app-icon name="layers" />
+    </button>
+    <div class="layers__panel panel">
+      <button type="button" class="layers__all" (click)="toggleAll()">
+        <span>{{ t.overview.layers.viewAll }}</span>
+        <span class="switch" [class.switch--on]="allLayers()"></span>
+      </button>
+      @for (l of layerKeys; track l.key) {
+        <button type="button" class="layers__row" [class.on]="ui.layers()[l.key]" (click)="ui.toggleLayer(l.key)" [attr.aria-pressed]="ui.layers()[l.key]">
+          <app-icon [name]="ui.layers()[l.key] ? 'diamond' : 'diamond-outline'" class="layers__diamond" />
+          <span>{{ t.overview.layers[l.key] }}</span>
+          <app-icon [name]="l.icon" class="layers__icon" />
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="controls__group panel">
+      <button type="button" (click)="zoom(1.25)" [attr.aria-label]="t.overview.zoomIn" [attr.title]="t.overview.zoomIn"><app-icon name="plus" /></button>
+      <button type="button" (click)="zoom(0.8)" [attr.aria-label]="t.overview.zoomOut" [attr.title]="t.overview.zoomOut"><app-icon name="minus" /></button>
+    </div>
+    <div class="controls__group panel">
+      <button type="button" (click)="rotate(-0.4)" aria-label="Rotate" title="Rotate"><app-icon name="rotate" /></button>
+      <button type="button" (click)="reset()" [attr.aria-label]="t.overview.resetView" [attr.title]="t.overview.resetView"><app-icon name="compass" /></button>
+      <button type="button" (click)="toggleFullscreen()" [attr.aria-label]="t.overview.fullscreen" [attr.title]="t.overview.fullscreen"><app-icon name="maximize" /></button>
+    </div>
+  </div>
+</section>
+
+<section class="dock" #dock>
+  <div class="kpis">
+    <div class="kpi panel">
+      <span class="kpi__label"><app-icon name="drone" />{{ t.overview.activeDrones }}</span>
+      <b class="kpi__value num">{{ c.flying }}<small>/{{ c.all }}</small></b>
+      <span class="kpi__bar"><i [style.width.%]="(c.flying / c.all) * 100"></i></span>
+    </div>
+    <div class="kpi panel">
+      <span class="kpi__label"><app-icon name="route" />{{ t.overview.inFlight }}</span>
+      <b class="kpi__value num">{{ k.inFlight }}</b>
+      <span class="kpi__sub">{{ i18n.f(t.overview.today, { n: k.deliveredToday }) }}</span>
+    </div>
+    <div class="kpi panel">
+      <span class="kpi__label"><app-icon name="clock" />{{ t.overview.avgDelivery }}</span>
+      <b class="kpi__value num">{{ i18n.duration(k.avgDelivery) }}</b>
+      <span class="kpi__sub">{{ t.analytics.last12h }}</span>
+    </div>
+    <div class="kpi panel">
+      <span class="kpi__label"><app-icon name="check-circle" />{{ t.overview.onTimeRate }}</span>
+      <b class="kpi__value num">{{ (k.onTimeRate * 100).toFixed(1) }}<small>%</small></b>
+      <span class="kpi__bar kpi__bar--ok"><i [style.width.%]="k.onTimeRate * 100"></i></span>
+    </div>
+  </div>
+
+  <div class="card panel">
+    <div class="panel__head">
+      <h2>{{ t.overview.drones }}</h2>
+      <span class="pill"><span class="live-dot"></span>{{ i18n.f(t.overview.online, { n: online() }) }}</span>
+    </div>
+    <ul class="list scroll-y">
+      @for (d of droneRows(); track d.id) {
+        <li>
+          <a class="row" [routerLink]="['/fleet', d.id]" (pointerenter)="hovered.set(d.id)" (pointerleave)="hovered.set(null)">
+            <img [src]="d.thumb" alt="" width="48" height="36" loading="lazy" />
+            <span class="row__main">
+              <b>{{ d.id }}</b>
+              <app-status [tone]="droneTone(d.status)">{{ t.droneStatus[d.status] }}</app-status>
+            </span>
+            <app-battery [value]="d.battery" />
+          </a>
+        </li>
+      }
+    </ul>
+  </div>
+
+  <div class="card panel">
+    <div class="panel__head">
+      <h2>{{ t.overview.activeRoutes }}</h2>
+      <a class="icon-btn icon-btn--ghost" routerLink="/missions" [attr.aria-label]="t.nav.missions"><app-icon name="arrow-up-right" /></a>
+    </div>
+    <ul class="list scroll-y">
+      @for (m of routeRows(); track m.id) {
+        @let note = routeNote(m);
+        <li>
+          <a
+            class="row row--route"
+            [routerLink]="['/missions', m.id]"
+            (pointerenter)="hovered.set(m.droneId)"
+            (pointerleave)="hovered.set(null)"
+          >
+            <span class="row__icon" [attr.data-tone]="note.tone"><app-icon name="route" /></span>
+            <span class="row__main">
+              <b>{{ m.id }}</b>
+              <small>{{ m.originId }} → {{ m.destination.label }}</small>
+            </span>
+            <span class="note" [attr.data-tone]="note.tone">{{ note.text }}</span>
+          </a>
+        </li>
+      }
+    </ul>
+  </div>
+
+  <div class="card panel">
+    <div class="panel__head">
+      <h2>{{ t.overview.notifications }}</h2>
+      @if (sim.unreadCount() > 0) {
+        <button type="button" class="pill pill--btn" (click)="sim.markAllRead()">{{ t.notifications.markAllRead }}</button>
+      }
+    </div>
+    <ul class="list scroll-y">
+      @for (n of noteRows(); track n.id) {
+        @let text = noteText(n);
+        <li class="notice" [class.notice--unread]="!n.read" [attr.data-tone]="n.tone">
+          <span class="notice__icon"><app-icon [name]="noteIcon(n)" /></span>
+          <span class="row__main">
+            <b>{{ text.title }}</b>
+            <small>{{ text.body }}</small>
+          </span>
+          <time class="num">{{ i18n.time(n.time) }}</time>
+        </li>
+      } @empty {
+        <li class="empty">{{ t.notifications.empty }}</li>
+      }
+    </ul>
+  </div>
+</section>
