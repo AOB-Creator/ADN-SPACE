@@ -1,0 +1,216 @@
+@let t = i18n.a();
+@let o = selected();
+@let m = mission();
+@let d = drone();
+
+<section class="list">
+  <header class="list__head">
+    <div class="seg">
+      @for (k of tabs; track k) {
+        <button type="button" [class.on]="tab() === k" (click)="tab.set(k)">{{ t.orders.tabs[k] }} <small>{{ counts()[k] }}</small></button>
+      }
+    </div>
+    <button type="button" class="btn-sm btn-sm--primary" (click)="openNew()"><app-icon name="plus" />{{ t.orders.newOrder }}</button>
+  </header>
+
+  <ul class="rows scroll-y">
+    @for (x of orders(); track x.id) {
+      <li>
+        <button type="button" class="row" [class.row--on]="x.id === o?.id" (click)="open(x)">
+          <span class="row__icon" [attr.data-tone]="orderTone(x.status)"><app-icon name="package" /></span>
+          <span class="row__main">
+            <b>{{ x.id }} @if (x.priority === 'express') {<i class="express">{{ t.orders.express }}</i>}</b>
+            <small>{{ x.customer }} · {{ x.dropoff.label }}</small>
+          </span>
+          <span class="row__side">
+            <app-status [tone]="orderTone(x.status)">{{ t.orderStatus[x.status] }}</app-status>
+            <time class="num">{{ i18n.time(x.requestedAt) }}</time>
+          </span>
+        </button>
+      </li>
+    }
+  </ul>
+</section>
+
+@if (o) {
+  <article class="detail scroll-y">
+    <header class="detail__head">
+      <div>
+        <div class="detail__title">
+          <h2>{{ o.id }}</h2>
+          <span class="pill" [attr.data-tone]="orderTone(o.status)"><app-status [tone]="orderTone(o.status)">{{ t.orderStatus[o.status] }}</app-status></span>
+        </div>
+        <p><app-icon name="calendar" />{{ i18n.f(t.orders.requestedAt, { time: i18n.time(o.requestedAt) }) }}</p>
+      </div>
+      @if (m && (o.status === 'inFlight' || o.status === 'scheduled')) {
+        <a class="btn-sm btn-sm--dark" [routerLink]="['/missions', m.id]"><app-icon name="route" />{{ t.orders.trackMission }}</a>
+      }
+    </header>
+
+    <div class="detail__grid">
+      <div class="hero panel">
+        <img src="images/drones/cargo.png" alt="" width="240" height="180" />
+        <div class="hero__meta">
+          <span><small>{{ t.orders.package }}</small><b>{{ o.weight.toFixed(1) }} {{ t.units.kg }}</b></span>
+          <span><small>&nbsp;</small><b class="muted">{{ o.dims }} cm</b></span>
+          <span>
+            <small>{{ t.orders.priority }}</small>
+            <b [class.express-text]="o.priority === 'express'">{{ o.priority === 'express' ? t.orders.express : t.orders.standard }}</b>
+          </span>
+        </div>
+      </div>
+
+      <div class="map panel">
+        <app-street-map [missionId]="m?.id ?? null" [compact]="true" [insets]="{ top: 20, right: 20, bottom: 20, left: 20 }" />
+      </div>
+    </div>
+
+    <dl class="facts panel">
+      <div>
+        <dt><app-icon name="user" />{{ t.orders.customer }}</dt>
+        <dd>{{ o.customer }} <small>{{ o.customerId }}</small></dd>
+      </div>
+      <div>
+        <dt><app-icon name="building" />{{ t.orders.pickup }}</dt>
+        <dd>{{ sim.warehouseLabel(o.pickupId) }} <small>{{ t.orders.hub }}</small></dd>
+      </div>
+      <div>
+        <dt><app-icon name="pin" />{{ t.orders.dropoff }}</dt>
+        <dd>{{ o.dropoff.label }} <small>Nukus</small></dd>
+      </div>
+      <div>
+        <dt><app-icon name="drone" />{{ t.orders.drone }}</dt>
+        <dd>
+          @if (d && m?.status !== 'scheduled') {
+            <a class="drone" [routerLink]="['/fleet', d.id]">
+              <img [src]="d.thumb" alt="" width="40" height="30" />
+              <span>{{ d.id }}</span>
+              <app-battery [value]="d.battery" />
+            </a>
+          } @else {
+            <span class="muted">{{ t.orders.unassigned }}</span>
+          }
+        </dd>
+      </div>
+      @if (m && o.status === 'inFlight') {
+        <div class="facts__progress">
+          <dt><app-icon name="route" />{{ t.orders.status }}</dt>
+          <dd>
+            <app-route-track [progress]="sim.missionProgress(m)" />
+            <small class="num">{{ t.missions.eta }} {{ i18n.time(sim.simTime + sim.missionEta(m)) }}</small>
+          </dd>
+        </div>
+      }
+    </dl>
+
+    <div class="actions">
+      <button type="button" class="btn-sm" (click)="openReassign()" [disabled]="!canChange(o)"><app-icon name="refresh" />{{ t.orders.reassign }}</button>
+      <button type="button" class="btn-sm" (click)="dialog.set('reschedule')" [disabled]="o.status !== 'scheduled'"><app-icon name="clock" />{{ t.orders.reschedule }}</button>
+      <button type="button" class="btn-sm btn-sm--danger" (click)="dialog.set('cancel')" [disabled]="!canChange(o)"><app-icon name="x-circle" />{{ t.orders.cancel }}</button>
+    </div>
+  </article>
+
+  @switch (dialog()) {
+    @case ('reassign') {
+      <div class="dialog-backdrop" (click)="closeDialog()">
+        <div class="dialog" (click)="$event.stopPropagation()" role="dialog" aria-modal="true">
+          <h2>{{ t.orders.reassignTitle }}</h2>
+          <p>{{ o.id }} · {{ o.dropoff.label }}</p>
+          <div class="choice-list">
+            @for (x of idle(); track x.id) {
+              <button type="button" [class.on]="pickDrone() === x.id" (click)="pickDrone.set(x.id)">
+                <img [src]="x.thumb" alt="" />
+                <span class="grow"><b>{{ x.id }}</b><br /><small class="muted">{{ x.model }} · {{ x.homeId }}</small></span>
+                <app-battery [value]="x.battery" />
+              </button>
+            } @empty {
+              <p class="muted">{{ t.orders.noIdle }}</p>
+            }
+          </div>
+          <div class="dialog__actions">
+            <button type="button" class="btn-sm" (click)="closeDialog()">{{ t.fleet.cancel }}</button>
+            <button type="button" class="btn-sm btn-sm--primary" [disabled]="!pickDrone()" (click)="confirmReassign(o)">{{ t.orders.confirm }}</button>
+          </div>
+        </div>
+      </div>
+    }
+    @case ('reschedule') {
+      <div class="dialog-backdrop" (click)="closeDialog()">
+        <div class="dialog" (click)="$event.stopPropagation()" role="dialog" aria-modal="true">
+          <h2>{{ t.orders.rescheduleTitle }}</h2>
+          <p>{{ o.id }} · {{ o.customer }}</p>
+          <div class="choice-list choice-list--grid">
+            @for (n of minuteOptions; track n) {
+              <button type="button" [class.on]="pickMinutes() === n" (click)="pickMinutes.set(n)">
+                <app-icon name="clock" />
+                <span class="grow"><b>{{ i18n.f(t.orders.inMinutes, { n: n }) }}</b><br /><small class="muted num">{{ i18n.time(sim.simTime + n * 60) }}</small></span>
+              </button>
+            }
+          </div>
+          <div class="dialog__actions">
+            <button type="button" class="btn-sm" (click)="closeDialog()">{{ t.fleet.cancel }}</button>
+            <button type="button" class="btn-sm btn-sm--primary" (click)="confirmReschedule(o)">{{ t.orders.confirm }}</button>
+          </div>
+        </div>
+      </div>
+    }
+    @case ('cancel') {
+      <div class="dialog-backdrop" (click)="closeDialog()">
+        <div class="dialog" (click)="$event.stopPropagation()" role="alertdialog" aria-modal="true">
+          <h2>{{ t.orders.cancelTitle }}</h2>
+          <p>{{ t.orders.cancelBody }}</p>
+          <div class="dialog__actions">
+            <button type="button" class="btn-sm" (click)="closeDialog()">{{ t.orders.keep }}</button>
+            <button type="button" class="btn-sm btn-sm--danger" (click)="confirmCancel(o)">{{ t.orders.cancel }}</button>
+          </div>
+        </div>
+      </div>
+    }
+  }
+}
+
+@if (dialog() === 'new') {
+  @let f = draft();
+  <div class="dialog-backdrop" (click)="closeDialog()">
+    <form class="dialog" (click)="$event.stopPropagation()" (submit)="$event.preventDefault(); createOrder()">
+      <h2>{{ t.orders.newTitle }}</h2>
+      <label class="field">
+        {{ t.orders.customer }}
+        <input type="text" [value]="f.customer" (input)="patchDraft({ customer: $any($event.target).value })" placeholder="A. Qudaybergenov" maxlength="40" />
+      </label>
+      <label class="field">
+        {{ t.orders.pickup }}
+        <select [value]="f.pickupId" (change)="patchDraft({ pickupId: $any($event.target).value })">
+          @for (w of sim.world.warehouses; track w.id) {
+            <option [value]="w.id">{{ w.id }} {{ w.name }}</option>
+          }
+        </select>
+      </label>
+      <label class="field">
+        {{ t.orders.dropoff }}
+        <select [value]="f.dropoff" (change)="patchDraft({ dropoff: +$any($event.target).value })">
+          @for (a of sim.world.addresses; track a.label; let i = $index) {
+            <option [value]="i">{{ a.label }}</option>
+          }
+        </select>
+      </label>
+      <div class="field-row">
+        <label class="field">
+          {{ t.orders.weight }} ({{ t.units.kg }})
+          <input type="number" min="0.1" max="4.5" step="0.1" [value]="f.weight" (input)="patchDraft({ weight: +$any($event.target).value })" />
+        </label>
+        <div class="field">
+          {{ t.orders.priority }}
+          <div class="seg">
+            <button type="button" [class.on]="f.priority === 'standard'" (click)="patchDraft({ priority: 'standard' })">{{ t.orders.standard }}</button>
+            <button type="button" [class.on]="f.priority === 'express'" (click)="patchDraft({ priority: 'express' })">{{ t.orders.express }}</button>
+          </div>
+        </div>
+      </div>
+      <div class="dialog__actions">
+        <button type="button" class="btn-sm" (click)="closeDialog()">{{ t.fleet.cancel }}</button>
+        <button type="submit" class="btn-sm btn-sm--primary">{{ t.orders.create }}</button>
+      </div>
+    </form>
+  </div>
+}

@@ -1,0 +1,53 @@
+<svg #svg class="map" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Street map of Nukus with live drone routes">
+  <defs>
+    <pattern [attr.id]="hatchId" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)">
+      <rect width="14" height="14" class="map__zone-bg" />
+      <rect width="6" height="14" class="map__zone-line" />
+    </pattern>
+  </defs>
+
+  <rect class="map__land" x="-4000" y="-4000" width="10400" height="9600" />
+  <rect class="map__road" x="-40" y="-40" [attr.width]="world.width + 80" [attr.height]="world.height + 80" rx="24" />
+  @for (b of world.blocks; track $index) {
+    <rect
+      class="map__block"
+      [class.map__block--park]="b.kind === 'park'"
+      [attr.x]="b.rect.x"
+      [attr.y]="b.rect.y"
+      [attr.width]="b.rect.w"
+      [attr.height]="b.rect.h"
+      rx="4"
+    />
+  }
+  <line
+    class="map__diag"
+    [attr.x1]="world.diagonal.a.x"
+    [attr.y1]="world.diagonal.a.y"
+    [attr.x2]="world.diagonal.b.x"
+    [attr.y2]="world.diagonal.b.y"
+    [attr.stroke-width]="world.diagonal.width"
+  />
+  <path class="map__parcels" [attr.d]="geo.parcels" />
+  <path class="map__trees" [attr.d]="geo.trees" />
+  <path class="map__bldg" [attr.d]="geo.buildings" />
+  @for (w of world.warehouses; track w.id) {
+    <rect class="map__hub" [attr.x]="w.block.x + 6" [attr.y]="w.block.y + 6" [attr.width]="w.block.w - 12" [attr.height]="w.block.h - 12" rx="6" />
+  }
+
+  @for (z of zones(); track z.id) {
+    <rect
+      class="map__zone"
+      [attr.x]="z.rect.x"
+      [attr.y]="z.rect.y"
+      [attr.width]="z.rect.w"
+      [attr.height]="z.rect.h"
+      [attr.fill]="'url(#' + hatchId + ')'"
+      rx="3"
+    />
+  }
+
+  <path #casing class="map__casing" />
+  <path #done class="map__done" />
+  <path #rest class="map__rest" />
+</svg>
+<div #overlay class="overlay" [class.overlay--compact]="compact()"></div>

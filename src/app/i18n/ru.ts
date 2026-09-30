@@ -1,4 +1,5 @@
 import { Translations } from './translations';
+import { ruApp } from './app/ru';
 
 export const ru: Translations = {
   meta: {
@@ -274,4 +275,5 @@ export const ru: Translations = {
   language: {
     label: 'Язык',
   },
+  app: ruApp,
 };

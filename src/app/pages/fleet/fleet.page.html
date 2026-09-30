@@ -1,0 +1,152 @@
+@let t = i18n.a();
+@let d = selected();
+@let info = details();
+
+<section class="list">
+  <header class="list__head">
+    <div class="seg tabs">
+      @for (k of tabs; track k) {
+        <button type="button" [class.on]="tab() === k" (click)="tab.set(k)">
+          {{ t.fleet.tabs[k] }} <small>{{ count(k) }}</small>
+        </button>
+      }
+    </div>
+    <div class="list__actions">
+      <label class="select">
+        <app-icon name="filter" />
+        <select [value]="modelFilter()" (change)="modelFilter.set($any($event.target).value)" [attr.aria-label]="t.fleet.filter">
+          <option value="all">{{ t.fleet.allModels }}</option>
+          <option value="Falcon-X2">Falcon-X2</option>
+          <option value="Kestrel-V">Kestrel-V</option>
+        </select>
+      </label>
+      <button type="button" class="btn-sm btn-sm--primary" (click)="registering.set(true)">
+        <app-icon name="plus" />{{ t.fleet.register }}
+      </button>
+    </div>
+  </header>
+
+  <div class="grid scroll-y">
+    @for (x of drones(); track x.id) {
+      <button type="button" class="card" [class.card--on]="x.id === d?.id" (click)="open(x)">
+        <span class="card__top">
+          <app-status [tone]="droneTone(x.status)">{{ statusLabel(x) }}</app-status>
+          <app-battery [value]="x.battery" />
+        </span>
+        <img [src]="x.thumb" alt="" width="240" height="180" loading="lazy" />
+        <span class="card__id">
+          <b>{{ x.id }}</b>
+          <small>{{ x.model }} · {{ x.homeId }}</small>
+        </span>
+        <app-payload [value]="x.payload" [max]="x.payloadMax" [unit]="t.units.kg" />
+      </button>
+    } @empty {
+      <p class="grid__empty">{{ t.fleet.empty }}</p>
+    }
+  </div>
+</section>
+
+@if (d && info) {
+  <aside class="detail">
+    <div class="viewer">
+      <app-drone-viewer [model]="d.model" [variant]="d.variant" [spinning]="isAirborne(d)" [cargo]="d.payload > 0" />
+      <span class="viewer__hint"><app-icon name="rotate" />{{ t.fleet.dragToRotate }}</span>
+      <span class="viewer__status"><app-status [tone]="droneTone(d.status)">{{ statusLabel(d) }}</app-status></span>
+    </div>
+
+    <div class="detail__body scroll-y">
+      <header class="detail__head">
+        <div>
+          <h2>{{ d.id }}</h2>
+          <p>{{ d.model }} · {{ info.home }}</p>
+        </div>
+        <app-battery [value]="d.battery" />
+      </header>
+
+      @if (info.mission; as m) {
+        <a class="mission" [routerLink]="['/missions', m.id]">
+          <span class="mission__icon"><app-icon name="route" /></span>
+          <span>
+            <b>{{ m.id }} · {{ t.fleet.inFlight }}</b>
+            <small>{{ m.originId }} → {{ m.destination.label }}</small>
+          </span>
+          <app-icon name="chevron-right" />
+        </a>
+      }
+
+      <app-payload [value]="d.payload" [max]="d.payloadMax" [unit]="t.units.kg" [large]="true" />
+
+      <dl class="stats">
+        <div><dt>{{ t.fleet.serial }}</dt><dd>{{ d.serial }}</dd></div>
+        <div><dt>{{ t.fleet.maxAlt }}</dt><dd>{{ d.maxAlt }} m</dd></div>
+        <div><dt>{{ t.fleet.maxSpeed }}</dt><dd>{{ d.maxSpeed }} {{ t.units.kmh }}</dd></div>
+        <div><dt>{{ t.fleet.flightTime }}</dt><dd>{{ d.flightTime }} {{ t.units.min }}</dd></div>
+        <div><dt>{{ t.fleet.payloadRated }}</dt><dd>{{ d.payloadRated }} {{ t.units.kg }}</dd></div>
+        <div><dt>{{ t.fleet.flightHours }}</dt><dd class="num">{{ d.flightHours.toFixed(1) }} {{ t.units.h }}</dd></div>
+        <div class="wide"><dt>{{ t.fleet.gps }}</dt><dd class="num">{{ info.gps }}</dd></div>
+        <div class="wide">
+          <dt>{{ t.fleet.certification }}</dt>
+          <dd>
+            <app-status [tone]="d.certDays < 45 ? 'warning' : 'success'">
+              {{ d.certDays < 45 ? t.fleet.expiring : t.fleet.valid }} · {{ i18n.f(t.fleet.daysLeft, { n: d.certDays }) }}
+            </app-status>
+          </dd>
+        </div>
+        <div><dt>ALT</dt><dd class="num">{{ d.alt.toFixed(0) }} m</dd></div>
+        <div><dt>SPD</dt><dd class="num">{{ d.speed.toFixed(0) }} {{ t.units.kmh }}</dd></div>
+      </dl>
+
+      <div class="detail__actions">
+        @if (isAirborne(d)) {
+          <button type="button" class="btn-sm btn-sm--dark" (click)="sim.returnToBase(d.id)" [disabled]="d.status === 'returning'">
+            <app-icon name="refresh" />{{ t.fleet.returnToBase }}
+          </button>
+        }
+        @if (d.status === 'maintenance') {
+          <button type="button" class="btn-sm btn-sm--primary" (click)="sim.bringOnline(d.id)">
+            <app-icon name="check-circle" />{{ t.fleet.bringOnline }}
+          </button>
+        } @else {
+          <button type="button" class="btn-sm btn-sm--danger" (click)="sim.takeOffline(d.id)" [disabled]="d.offlineOnLanding">
+            <app-icon name="wrench" />{{ t.fleet.takeOffline }}
+          </button>
+        }
+      </div>
+    </div>
+  </aside>
+}
+
+@if (registering()) {
+  <div class="dialog-backdrop" (click)="registering.set(false)">
+    <form class="dialog" (click)="$event.stopPropagation()" (submit)="$event.preventDefault(); register()">
+      <h2>{{ t.fleet.registerTitle }}</h2>
+      <img class="dialog__preview" [src]="preview()" alt="" width="240" height="180" />
+      <label class="field">
+        {{ t.fleet.model }}
+        <select [value]="form().model" (change)="updateForm({ model: $any($event.target).value })">
+          <option value="Falcon-X2">Falcon-X2</option>
+          <option value="Kestrel-V">Kestrel-V</option>
+        </select>
+      </label>
+      <div class="field">
+        {{ t.fleet.color }}
+        <div class="seg">
+          <button type="button" [class.on]="form().variant === 'white'" (click)="updateForm({ variant: 'white' })">{{ t.fleet.white }}</button>
+          <button type="button" [class.on]="form().variant === 'black'" (click)="updateForm({ variant: 'black' })">{{ t.fleet.black }}</button>
+        </div>
+      </div>
+      <label class="field">
+        {{ t.fleet.home }}
+        <select [value]="form().home" (change)="updateForm({ home: $any($event.target).value })">
+          @for (w of sim.world.warehouses; track w.id) {
+            <option [value]="w.id">{{ w.id }} {{ w.name }}</option>
+          }
+        </select>
+      </label>
+      <div class="dialog__actions">
+        <button type="button" class="btn-sm" (click)="registering.set(false)">{{ t.fleet.cancel }}</button>
+        <button type="submit" class="btn-sm btn-sm--primary">{{ t.fleet.submit }}</button>
+      </div>
+    </form>
+  </div>
+}

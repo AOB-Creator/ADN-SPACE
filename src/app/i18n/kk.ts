@@ -1,4 +1,5 @@
 import { Translations } from './translations';
+import { kkApp } from './app/kk';
 
 export const kk: Translations = {
   meta: {
@@ -273,4 +274,5 @@ export const kk: Translations = {
   language: {
     label: 'Til',
   },
+  app: kkApp,
 };

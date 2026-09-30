@@ -1,3 +1,5 @@
+import { AppStrings } from './app-strings';
+
 export type Locale = 'uz' | 'en' | 'ru' | 'kk';
 
 export interface LocaleOption {
@@ -160,4 +162,5 @@ export interface Translations {
   language: {
     label: string;
   };
+  app: AppStrings;
 }

@@ -14,8 +14,8 @@
     <p class="hero__lede">{{ i18n.t().hero.lede }}</p>
 
     <div class="hero__actions">
-      <a class="btn btn-primary" href="#applications">{{ i18n.t().hero.ctaPrimary }}</a>
-      <a class="btn btn-ghost" href="#contact">{{ i18n.t().hero.ctaSecondary }}</a>
+      <a class="btn btn-primary" routerLink="/company" fragment="applications">{{ i18n.t().hero.ctaPrimary }}</a>
+      <a class="btn btn-ghost" routerLink="/company" fragment="contact">{{ i18n.t().hero.ctaSecondary }}</a>
     </div>
 
     <dl class="hero__stats">
@@ -38,7 +38,7 @@
     </dl>
   </div>
 
-  <a class="hero__scroll-cue" href="#about" aria-label="Scroll to learn more">
+  <a class="hero__scroll-cue" routerLink="/company" fragment="about" aria-label="Scroll to learn more">
     <span></span>
   </a>
 </div>

@@ -1,0 +1,329 @@
+:host {
+  --m-road: #ffffff;
+  --m-land: #e8eaee;
+  --m-block: #eef0f3;
+  --m-park: #e4ede2;
+  --m-bldg: #e2e4e9;
+  --m-bldg-line: #d2d5dc;
+  --m-parcel: #e2e4e9;
+  --m-tree: #d9e4d6;
+  --m-label: #8c919b;
+  --m-label-halo: #ffffff;
+  --m-route: var(--accent);
+  --m-casing: #ffffff;
+
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: var(--m-land);
+  touch-action: none;
+  user-select: none;
+  cursor: grab;
+}
+
+:host(.dragging) {
+  cursor: grabbing;
+}
+
+:host-context([data-theme='dark']) {
+  --m-road: #202226;
+  --m-land: #111215;
+  --m-block: #16171a;
+  --m-park: #172019;
+  --m-bldg: #1d1f23;
+  --m-bldg-line: #2b2e34;
+  --m-parcel: #22252a;
+  --m-tree: #1b261e;
+  --m-label: #6f747e;
+  --m-label-halo: #202226;
+  --m-casing: #101114;
+}
+
+.map {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.map__land {
+  fill: var(--m-land);
+}
+
+.map__road {
+  fill: var(--m-road);
+}
+
+.map__block {
+  fill: var(--m-block);
+
+  &--park {
+    fill: var(--m-park);
+  }
+}
+
+.map__diag {
+  stroke: var(--m-road);
+  stroke-linecap: butt;
+}
+
+.map__parcels {
+  fill: none;
+  stroke: var(--m-parcel);
+  stroke-width: 1.2;
+}
+
+.map__bldg {
+  fill: var(--m-bldg);
+  stroke: var(--m-bldg-line);
+  stroke-width: 1;
+}
+
+.map__trees {
+  fill: var(--m-tree);
+}
+
+.map__hub {
+  fill: color-mix(in srgb, var(--accent) 9%, transparent);
+  stroke: color-mix(in srgb, var(--accent) 35%, transparent);
+  stroke-width: 1.5;
+  stroke-dasharray: 6 5;
+}
+
+.map__zone {
+  stroke: var(--danger);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.map__zone-bg {
+  fill: color-mix(in srgb, var(--danger) 8%, transparent);
+}
+
+.map__zone-line {
+  fill: color-mix(in srgb, var(--danger) 55%, transparent);
+}
+
+.map__casing,
+.map__done,
+.map__rest {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.map__casing {
+  stroke: var(--m-casing);
+  stroke-width: 9;
+  opacity: 0.9;
+}
+
+.map__done {
+  stroke: var(--text-hi);
+  stroke-width: 3;
+  stroke-dasharray: 1 7;
+  opacity: 0.55;
+}
+
+.map__rest {
+  stroke: var(--m-route);
+  stroke-width: 4.5;
+
+  &.is-preview {
+    stroke-dasharray: 8 7;
+    opacity: 0.8;
+  }
+}
+
+// ---- overlay (constant-size HTML markers) ------------------------------------
+.overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  font-family: var(--font-body);
+}
+
+.overlay ::ng-deep > * {
+  position: absolute;
+  left: 0;
+  top: 0;
+  will-change: transform;
+  white-space: nowrap;
+}
+
+.overlay ::ng-deep .m-road {
+  translate: -50% -50%;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--m-label);
+  text-shadow:
+    0 0 3px var(--m-label-halo),
+    0 0 3px var(--m-label-halo),
+    0 0 2px var(--m-label-halo);
+
+  &.m-road--main {
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  &.m-road--v {
+    rotate: -90deg;
+  }
+}
+
+.overlay ::ng-deep .m-hub {
+  translate: -50% -50%;
+  padding: 3px 7px;
+  border-radius: 7px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  box-shadow: 0 4px 10px -4px color-mix(in srgb, var(--accent) 70%, transparent);
+}
+
+.overlay ::ng-deep .m-zone {
+  translate: -50% -50%;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px 2px 3px;
+  border-radius: 999px;
+  background: var(--bg-elevated);
+  border: 1px solid color-mix(in srgb, var(--danger) 35%, transparent);
+  color: var(--danger);
+  font-size: 10px;
+  font-weight: 700;
+  box-shadow: var(--shadow-xs);
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.overlay ::ng-deep .m-drone {
+  translate: -50% -50%;
+  width: 12px;
+  height: 12px;
+  padding: 0;
+  border-radius: 999px;
+  border: 2.5px solid var(--bg-elevated);
+  background: var(--text-hi);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  pointer-events: auto;
+  cursor: pointer;
+  transition: scale 0.15s;
+
+  &:hover {
+    scale: 1.4;
+    background: var(--accent);
+  }
+
+  &.m-drone--ret {
+    background: var(--text-lo);
+  }
+}
+
+.overlay ::ng-deep .m-origin {
+  translate: -50% -50%;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: var(--bg-elevated);
+  border: 4px solid var(--text-hi);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.overlay ::ng-deep .m-dest {
+  translate: -8px -50%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  i {
+    width: 16px;
+    height: 16px;
+    background: var(--accent);
+    border: 3px solid var(--bg-elevated);
+    rotate: 45deg;
+    border-radius: 2px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  }
+
+  b {
+    padding: 4px 8px;
+    border-radius: 8px;
+    background: var(--bg-elevated);
+    color: var(--text-hi);
+    font-size: 11px;
+    font-weight: 600;
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+.overlay ::ng-deep .m-focus {
+  translate: -50% -50%;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  z-index: 3;
+}
+
+.overlay ::ng-deep .m-focus__pulse {
+  position: absolute;
+  inset: -6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  animation: m-pulse 1.8s ease-out infinite;
+}
+
+.overlay ::ng-deep .m-focus__body {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: var(--bg-inverted);
+  color: var(--text-on-inverted);
+  border: 3px solid var(--bg-elevated);
+  box-shadow: 0 6px 16px -4px rgba(0, 0, 0, 0.45);
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.overlay ::ng-deep .m-focus--alert {
+  .m-focus__pulse {
+    background: color-mix(in srgb, var(--danger) 28%, transparent);
+  }
+
+  .m-focus__body {
+    background: var(--danger);
+    color: #fff;
+  }
+}
+
+.overlay--compact ::ng-deep .m-road {
+  display: none;
+}
+
+@keyframes m-pulse {
+  from {
+    transform: scale(0.6);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}

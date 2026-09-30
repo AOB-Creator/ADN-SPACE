@@ -1,0 +1,190 @@
+<div class="shell" [attr.data-page]="page()">
+  <header class="top">
+    <div class="top__brand">
+      @if (shell.backLink(); as back) {
+        <a class="top__back" [routerLink]="back" [attr.aria-label]="i18n.a().missions.back">
+          <app-icon name="caret-left" />
+        </a>
+      }
+      <a class="logo" routerLink="/" aria-label="ADN-SPACE">
+        <svg viewBox="0 0 32 32" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M4 4h8.5v5.2l3.5 3.5 3.5-3.5V4H28v8.5h-5.2L19.3 16l3.5 3.5H28V28h-8.5v-5.2L16 19.3l-3.5 3.5V28H4v-8.5h5.2l3.5-3.5-3.5-3.5H4z"
+          />
+        </svg>
+      </a>
+      <h1 class="top__title">{{ title() }}</h1>
+    </div>
+
+    <div class="search" data-menu-root>
+      <app-icon name="search" />
+      <input
+        type="search"
+        [value]="ui.search()"
+        (input)="onSearch($any($event.target).value)"
+        (focus)="ui.search().length >= 2 && menu.set('search')"
+        (keydown.enter)="submitSearch()"
+        [placeholder]="i18n.a().search.placeholder"
+        [attr.aria-label]="i18n.a().search.placeholder"
+      />
+      @if (menu() === 'search') {
+        <div class="pop pop--search">
+          @for (s of suggestions(); track s.group + s.label) {
+            <button type="button" class="suggestion" (click)="go(s)">
+              <span class="suggestion__group">{{ i18n.a().search[s.group] }}</span>
+              <span class="suggestion__label">{{ s.label }}</span>
+              <span class="suggestion__meta">{{ s.meta }}</span>
+            </button>
+          } @empty {
+            <p class="pop__empty">{{ i18n.a().search.empty }}</p>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="top__actions">
+      <button
+        type="button"
+        class="square"
+        [class.square--live]="sim.running()"
+        (click)="toggleLive()"
+        [attr.aria-pressed]="sim.running()"
+        [attr.title]="(sim.running() ? i18n.a().live.on : i18n.a().live.off) + ' · ' + i18n.a().live.demo"
+        [attr.aria-label]="sim.running() ? i18n.a().live.on : i18n.a().live.off"
+      >
+        <app-icon [name]="sim.running() ? 'radio' : 'pause'" />
+      </button>
+
+      <div class="rel" data-menu-root>
+        <button
+          type="button"
+          class="square"
+          (click)="toggle('notifications')"
+          [attr.aria-label]="i18n.a().notifications.title"
+          [attr.aria-expanded]="menu() === 'notifications'"
+        >
+          <app-icon name="bell" />
+          @if (sim.unreadCount() > 0) {
+            <span class="badge">{{ sim.unreadCount() }}</span>
+          }
+        </button>
+        @if (menu() === 'notifications') {
+          <div class="pop pop--notes">
+            <div class="pop__head">
+              <strong>{{ i18n.a().notifications.title }}</strong>
+              <button type="button" class="link" (click)="sim.markAllRead()">
+                {{ i18n.a().notifications.markAllRead }}
+              </button>
+            </div>
+            @for (n of notifications(); track n.id) {
+              <div class="note" [class.note--unread]="!n.read" [attr.data-tone]="n.tone">
+                <span class="note__icon"><app-icon [name]="notificationIcon(n)" /></span>
+                <span class="note__text">
+                  <b>{{ notificationText(n).title }}</b>
+                  <small>{{ notificationText(n).body }}</small>
+                </span>
+                <time>{{ i18n.time(n.time) }}</time>
+              </div>
+            } @empty {
+              <p class="pop__empty">{{ i18n.a().notifications.empty }}</p>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="rel" data-menu-root>
+        <button
+          type="button"
+          class="avatar"
+          (click)="toggle('user')"
+          aria-label="Alpamis Omirbekov"
+          [attr.aria-expanded]="menu() === 'user'"
+        >
+          <img src="images/Alpamis.jpg" alt="" />
+        </button>
+        @if (menu() === 'user') {
+          <div class="pop pop--user">
+            <div class="user">
+              <img src="images/Alpamis.jpg" alt="" />
+              <span><b>Alpamis Omirbekov</b><small>{{ i18n.a().user.role }}</small></span>
+            </div>
+            <button type="button" class="row" (click)="theme.toggle()">
+              <app-icon [name]="theme.theme() === 'dark' ? 'moon' : 'sun'" />
+              <span>{{ i18n.a().user.darkMode }}</span>
+              <span class="switch" [class.switch--on]="theme.theme() === 'dark'"></span>
+            </button>
+            <div class="row row--static">
+              <app-icon name="globe" />
+              <span>{{ i18n.a().user.language }}</span>
+            </div>
+            <div class="langs">
+              @for (l of locales; track l.code) {
+                <button type="button" [class.on]="i18n.locale() === l.code" (click)="setLocale(l.code)">
+                  {{ l.label }}
+                </button>
+              }
+            </div>
+            <a class="row" routerLink="/settings"><app-icon name="settings" /><span>{{ navLabel('settings') }}</span></a>
+            <a class="row" routerLink="/company"><app-icon name="building" /><span>{{ navLabel('company') }}</span></a>
+          </div>
+        }
+      </div>
+    </div>
+  </header>
+
+  <nav class="side" [attr.aria-label]="'ADN-SPACE'">
+    @for (item of nav; track item.key) {
+      <a
+        class="square side__item"
+        [routerLink]="item.path"
+        routerLinkActive="square--active"
+        [routerLinkActiveOptions]="{ exact: item.path === '/' }"
+        [attr.aria-label]="navLabel(item.key)"
+        [attr.data-label]="navLabel(item.key)"
+      >
+        <app-icon [name]="item.icon" />
+        @if (item.badge && pendingOrders()) {
+          <span class="dot"></span>
+        }
+      </a>
+    }
+  </nav>
+
+  <main class="main">
+    <router-outlet />
+  </main>
+
+  <nav class="tabs" data-menu-root>
+    @for (item of tabs; track item.key) {
+      <a
+        class="square tabs__item"
+        [routerLink]="item.path"
+        routerLinkActive="square--active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        [attr.aria-label]="navLabel(item.key)"
+      >
+        <app-icon [name]="item.icon" />
+        @if (item.badge && pendingOrders()) {
+          <span class="dot"></span>
+        }
+      </a>
+    }
+    <button
+      type="button"
+      class="square tabs__item"
+      [class.square--active]="menu() === 'more'"
+      (click)="toggle('more')"
+      [attr.aria-label]="navLabel('more')"
+    >
+      <app-icon name="dots-vertical" />
+    </button>
+    @if (menu() === 'more') {
+      <div class="pop pop--more">
+        @for (item of nav.slice(3); track item.key) {
+          <a class="row" [routerLink]="item.path"><app-icon [name]="item.icon" /><span>{{ navLabel(item.key) }}</span></a>
+        }
+      </div>
+    }
+  </nav>
+</div>
