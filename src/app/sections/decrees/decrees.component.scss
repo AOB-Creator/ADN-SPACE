@@ -22,23 +22,20 @@
   width: 0.65rem;
   height: 0.65rem;
   border-radius: 999px;
-  background: var(--cyan);
-  box-shadow: 0 0 0 4px var(--bg), 0 0 16px var(--cyan);
+  background: var(--accent);
+  box-shadow: 0 0 0 4px var(--bg);
 }
 
-.decrees__item[data-accent='violet'] .decrees__dot {
-  background: var(--violet);
-  box-shadow: 0 0 0 4px var(--bg), 0 0 16px var(--violet);
+.decrees__item[data-accent='success'] .decrees__dot {
+  background: var(--success);
 }
 
-.decrees__item[data-accent='magenta'] .decrees__dot {
-  background: var(--magenta);
-  box-shadow: 0 0 0 4px var(--bg), 0 0 16px var(--magenta);
+.decrees__item[data-accent='danger'] .decrees__dot {
+  background: var(--danger);
 }
 
-.decrees__item[data-accent='amber'] .decrees__dot {
-  background: var(--amber);
-  box-shadow: 0 0 0 4px var(--bg), 0 0 16px var(--amber);
+.decrees__item[data-accent='warning'] .decrees__dot {
+  background: var(--warning);
 }
 
 .decrees__card {

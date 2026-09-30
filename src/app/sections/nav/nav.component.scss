@@ -3,38 +3,21 @@
   inset-inline: 0;
   top: 0;
   z-index: 50;
-
-  // The bar starts transparent, floating over the hero — which always stays
-  // a dark "space" scene regardless of site theme (see hero.component.scss)
-  // — so its own colors stay fixed-dark until `.nav--scrolled` gives it an
-  // opaque background, at which point it switches to the real theme tokens.
-  --nav-fg: #f7f9fd;
-  --nav-fg-mid: #b8c1da;
-  --nav-surface: rgba(255, 255, 255, 0.08);
-  --nav-border: rgba(255, 255, 255, 0.14);
-  --nav-border-glow: rgba(94, 234, 212, 0.5);
 }
 
 .nav {
-  padding-block: 1.4rem;
-  color: var(--nav-fg);
-  transition: padding 0.35s var(--ease-out-expo), background 0.35s, border-color 0.35s,
-    color 0.35s;
+  padding-block: 1.1rem;
+  background: color-mix(in srgb, var(--bg-elevated) 88%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid transparent;
+  transition: padding 0.3s var(--ease-out-expo), border-color 0.3s, box-shadow 0.3s;
 }
 
 .nav--scrolled {
-  padding-block: 0.9rem;
-  background: color-mix(in srgb, var(--bg) 72%, transparent);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  padding-block: 0.8rem;
   border-bottom-color: var(--border-soft);
-
-  --nav-fg: var(--text-hi);
-  --nav-fg-mid: var(--text-mid);
-  --nav-surface: var(--surface);
-  --nav-border: var(--border-soft);
-  --nav-border-glow: var(--border-glow);
+  box-shadow: var(--shadow-xs);
 }
 
 .nav__bar {
@@ -46,63 +29,73 @@
 .nav__logo {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.65rem;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 1.05rem;
-  letter-spacing: 0.02em;
+  letter-spacing: -0.01em;
+  color: var(--text-hi);
   margin-right: auto;
 }
 
 .nav__logo-mark {
-  width: 0.7rem;
-  height: 0.7rem;
-  border-radius: 999px;
-  background: var(--grad-aurora);
-  box-shadow: 0 0 14px var(--cyan);
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.6rem;
+  background: var(--text-hi);
+  color: var(--bg-elevated);
+  flex-shrink: 0;
+
+  svg {
+    width: 1.05rem;
+    height: 1.05rem;
+  }
 }
 
 .nav__links {
   display: none;
-  gap: 1.8rem;
+  gap: 1.7rem;
   font-size: 0.9rem;
-  color: var(--nav-fg-mid);
+  color: var(--text-mid);
 
   a {
-    transition: color 0.25s;
+    transition: color 0.2s;
   }
 
   a:hover {
-    color: var(--cyan-soft);
+    color: var(--text-hi);
   }
 }
 
 .nav__tools {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.55rem;
 }
 
 .nav__icon-btn {
   display: grid;
   place-items: center;
-  width: 2.4rem;
-  height: 2.4rem;
-  border-radius: 999px;
-  border: 1px solid var(--nav-border);
-  background: var(--nav-surface);
-  color: var(--nav-fg);
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border-soft);
+  background: var(--bg-elevated);
+  color: var(--text-hi);
   cursor: pointer;
-  transition: border-color 0.3s, background 0.3s, color 0.3s, transform 0.3s var(--ease-spring);
+  box-shadow: var(--shadow-xs);
+  transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.2s var(--ease-spring);
 
   app-icon {
-    width: 1.1rem;
-    height: 1.1rem;
+    width: 1.05rem;
+    height: 1.05rem;
   }
 
   &:hover {
-    border-color: var(--nav-border-glow);
-    color: var(--cyan-soft);
+    border-color: var(--border-strong);
+    background: var(--bg-raise);
     transform: translateY(-1px);
   }
 }
@@ -113,12 +106,12 @@
 
 .nav__lang-trigger {
   width: auto;
-  padding-inline: 0.85rem;
-  gap: 0.4rem;
+  padding-inline: 0.8rem;
+  gap: 0.35rem;
   font-family: var(--font-display);
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
 }
 
 .nav__lang-menu {
@@ -128,65 +121,66 @@
   display: flex;
   flex-direction: column;
   min-width: 6rem;
-  padding: 0.4rem;
-  gap: 0.15rem;
+  padding: 0.35rem;
+  gap: 0.1rem;
   background: var(--bg-elevated);
   border: 1px solid var(--border-soft);
-  border-radius: 0.9rem;
+  border-radius: 0.85rem;
   box-shadow: var(--shadow-deep);
   z-index: 10;
 }
 
 .nav__lang-option {
-  padding: 0.55rem 0.75rem;
+  padding: 0.5rem 0.7rem;
   border: none;
-  border-radius: 0.6rem;
+  border-radius: 0.55rem;
   background: transparent;
   color: var(--text-mid);
   font-family: var(--font-display);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 600;
   text-align: left;
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
 
   &:hover {
-    background: var(--surface);
+    background: var(--bg-raise);
     color: var(--text-hi);
   }
 
   &.is-active {
-    background: var(--grad-aurora);
-    color: var(--on-accent);
+    background: var(--accent-soft);
+    color: var(--accent);
   }
 }
 
 .nav__cta {
   display: none;
-  padding: 0.6rem 1.35rem;
+  padding: 0.55rem 1.3rem;
   font-size: 0.85rem;
 }
 
 .nav__toggle {
   display: grid;
   place-items: center;
-  gap: 5px;
-  width: 2.4rem;
-  height: 2.4rem;
-  border-radius: 999px;
-  border: 1px solid var(--nav-border);
-  background: var(--nav-surface);
+  gap: 4px;
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border-soft);
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow-xs);
   cursor: pointer;
 
   span {
-    width: 1.1rem;
+    width: 1.05rem;
     height: 2px;
-    background: var(--nav-fg);
+    background: var(--text-hi);
     transition: transform 0.3s, opacity 0.3s;
   }
 
   &.is-open span:nth-child(1) {
-    transform: translateY(7px) rotate(45deg);
+    transform: translateY(6px) rotate(45deg);
   }
 
   &.is-open span:nth-child(2) {
@@ -194,25 +188,22 @@
   }
 
   &.is-open span:nth-child(3) {
-    transform: translateY(-7px) rotate(-45deg);
+    transform: translateY(-6px) rotate(-45deg);
   }
 }
 
 .nav__mobile {
   display: flex;
   flex-direction: column;
-  gap: 1.1rem;
-  padding: 1.5rem 1.5rem 2rem;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem 1.75rem;
   background: var(--bg-elevated);
   border-top: 1px solid var(--border-soft);
   font-family: var(--font-display);
-  // This dropdown always has its own opaque, theme-colored background (unlike
-  // the transparent bar above it), so it uses the real theme text color
-  // rather than the hero-safe --nav-fg.
   color: var(--text-hi);
 
   a {
-    padding-block: 0.3rem;
+    padding-block: 0.25rem;
   }
 }
 

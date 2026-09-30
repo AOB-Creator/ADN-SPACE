@@ -1,31 +1,10 @@
 :host {
   display: block;
-
-  // The hero is an immersive dark "space" scene and intentionally stays dark
-  // even when the rest of the site is in light mode — the starfield/3D drone
-  // only read well against a near-black backdrop.
-  --bg: #070a12;
-  --bg-elevated: #0c1120;
-  --surface: rgba(255, 255, 255, 0.045);
-  --surface-strong: rgba(255, 255, 255, 0.08);
-  --border-soft: rgba(255, 255, 255, 0.1);
-  --border-glow: rgba(94, 234, 212, 0.4);
-  --cyan: #4deee0;
-  --cyan-soft: #a4f6ec;
-  --violet: #9b81ff;
-  --magenta: #ff6dcf;
-  --on-accent: #0a0e1a;
-  --text-hi: #f7f9fd;
-  --text-mid: #b8c1da;
-  --text-lo: #838da8;
-
-  color: var(--text-hi);
-  background: var(--bg);
 }
 
 .hero__stage {
   position: relative;
-  min-height: 100svh;
+  min-height: 92svh;
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -44,63 +23,26 @@
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: radial-gradient(ellipse at center, transparent 35%, var(--bg) 92%);
+  background: radial-gradient(ellipse at 62% 50%, transparent 30%, var(--bg) 88%);
   pointer-events: none;
-}
-
-.hero__grid {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  opacity: 0.35;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(ellipse 65% 55% at 50% 40%, black, transparent 75%);
-}
-
-.hero__bracket {
-  position: absolute;
-  z-index: 2;
-  width: 64px;
-  height: 64px;
-  border: 2px solid var(--border-glow);
-  opacity: 0.6;
-  pointer-events: none;
-}
-
-.hero__bracket--tl {
-  top: 6.5rem;
-  left: 1.5rem;
-  border-right: none;
-  border-bottom: none;
-}
-
-.hero__bracket--br {
-  bottom: 4rem;
-  right: 1.5rem;
-  border-left: none;
-  border-top: none;
 }
 
 .hero__content {
   position: relative;
   z-index: 3;
-  padding-block: 8rem 6rem;
+  padding-block: 7.5rem 5rem;
 }
 
 .hero__title {
   margin-top: 1.25rem;
-  font-size: clamp(2.6rem, 1.7rem + 4.2vw, 5.4rem);
-  line-height: 1.03;
+  font-size: clamp(2.5rem, 1.7rem + 3.8vw, 4.8rem);
+  line-height: 1.05;
 }
 
 .hero__lede {
-  margin-top: 1.75rem;
-  max-width: 42rem;
-  font-size: clamp(1rem, 0.94rem + 0.3vw, 1.15rem);
+  margin-top: 1.5rem;
+  max-width: 34rem;
+  font-size: clamp(1rem, 0.94rem + 0.3vw, 1.1rem);
   color: var(--text-mid);
 }
 
@@ -108,33 +50,36 @@
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  margin-top: 2.5rem;
+  margin-top: 2.25rem;
 }
 
 .hero__stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr));
-  gap: 1.5rem;
-  max-width: 40rem;
-  margin: 4rem 0 0;
-  padding-top: 2rem;
-  border-top: 1px solid var(--border-soft);
+  grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+  gap: 0.75rem;
+  max-width: 34rem;
+  margin: 3rem 0 0;
 }
 
 .hero__stat {
+  padding: 1rem 1.1rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+
   dt {
     font-family: var(--font-display);
-    font-size: 0.7rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
     color: var(--text-lo);
   }
 
   dd {
-    margin: 0.35rem 0 0;
+    margin: 0.3rem 0 0;
     font-family: var(--font-display);
-    font-size: clamp(1.3rem, 1.1rem + 0.6vw, 1.75rem);
-    font-weight: 600;
+    font-size: clamp(1.15rem, 1.05rem + 0.4vw, 1.4rem);
+    font-weight: 700;
     color: var(--text-hi);
   }
 }
@@ -151,12 +96,13 @@
   border-radius: 999px;
   display: grid;
   place-items: center;
+  background: color-mix(in srgb, var(--bg-elevated) 60%, transparent);
 
   span {
     width: 4px;
     height: 8px;
     border-radius: 999px;
-    background: var(--grad-aurora);
+    background: var(--accent);
     animation: scroll-cue 1.8s ease-in-out infinite;
   }
 }
@@ -178,11 +124,5 @@
 @media (prefers-reduced-motion: reduce) {
   .hero__scroll-cue span {
     animation: none;
-  }
-}
-
-@media (max-width: 640px) {
-  .hero__bracket {
-    display: none;
   }
 }

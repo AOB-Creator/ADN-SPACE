@@ -6,11 +6,13 @@ import {
   ElementRef,
   OnDestroy,
   afterNextRender,
+  effect,
   inject,
   viewChild,
 } from '@angular/core';
 import { DroneScene } from './drone-scene';
 import { I18nService } from '../../i18n/i18n.service';
+import { ThemeService } from '../../shared/theme.service';
 
 @Component({
   selector: 'app-hero',
@@ -22,6 +24,7 @@ import { I18nService } from '../../i18n/i18n.service';
 })
 export class HeroComponent implements AfterViewInit, OnDestroy {
   protected readonly i18n = inject(I18nService);
+  private readonly theme = inject(ThemeService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly canvasRef = viewChild.required<ElementRef<HTMLCanvasElement>>('canvas');
   private readonly stageRef = viewChild.required<ElementRef<HTMLElement>>('stage');
@@ -32,6 +35,8 @@ export class HeroComponent implements AfterViewInit, OnDestroy {
   constructor() {
     // WebGL setup must happen after the canvas exists in the DOM.
     afterNextRender(() => this.setupScene());
+
+    effect(() => this.scene?.setTheme(this.theme.theme() === 'dark'));
   }
 
   ngAfterViewInit(): void {
@@ -44,6 +49,7 @@ export class HeroComponent implements AfterViewInit, OnDestroy {
 
     this.scene = new DroneScene(canvas);
     this.scene.setReducedMotion(matchMedia('(prefers-reduced-motion: reduce)').matches);
+    this.scene.setTheme(this.theme.theme() === 'dark');
 
     const applySize = () => {
       const rect = stage.getBoundingClientRect();

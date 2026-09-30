@@ -1,100 +1,121 @@
 // ADN-SPACE — global design system
-// A refined aerospace/HUD theme: soft neon cyan + violet + magenta accents,
-// glassmorphism, animated gradient aurora, and glow-driven motion — with a
-// full light-mode counterpart driven by `data-theme` on <html>.
+// A clean, light "operations dashboard" aesthetic: white cards on a soft
+// neutral backdrop, an indigo/blue accent, muted status colors, and quiet
+// shadows — with a dark-mode counterpart built from the same tokens.
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 
-  // ---- semantic tokens (dark, default) --------------------------------
-  --bg: #070a12;
-  --bg-elevated: #0c1120;
-  --bg-raise: #121a2e;
+  // ---- semantic tokens (light, default) --------------------------------
+  --bg: #f2f3f6;
+  --bg-elevated: #ffffff;
+  --bg-raise: #f7f8fa;
+  --bg-inverted: #1c1e21;
+  --bg-inverted-raise: #2a2c30;
 
-  --surface: rgba(255, 255, 255, 0.045);
-  --surface-strong: rgba(255, 255, 255, 0.08);
-  --border-soft: rgba(255, 255, 255, 0.1);
-  --border-glow: rgba(94, 234, 212, 0.4);
-  --stripe: rgba(255, 255, 255, 0.025);
+  --surface: #ffffff;
+  --surface-strong: #f7f8fa;
+  --border-soft: #e7e8ec;
+  --border-strong: #d7d9df;
+  --border-glow: var(--accent);
 
-  --cyan: #4deee0;
-  --cyan-soft: #a4f6ec;
-  --violet: #9b81ff;
-  --violet-soft: #c7b8ff;
-  --magenta: #ff6dcf;
-  --amber: #ffc35c;
+  --accent: #5468d6;
+  --accent-hover: #4558c4;
+  --accent-soft: #eaedfb;
+  --accent-2: #7c8ff0;
 
-  --on-accent: #0a0e1a;
+  --success: #2f9e62;
+  --success-soft: #e6f5ec;
+  --danger: #d15252;
+  --danger-soft: #fbeaea;
+  --warning: #d6a01f;
+  --warning-soft: #faf1dd;
 
-  --text-hi: #f7f9fd;
-  --text-mid: #b8c1da;
-  --text-lo: #838da8;
+  --on-accent: #ffffff;
 
-  --grid-line: rgba(255, 255, 255, 0.05);
-  --glow-1: rgba(155, 129, 255, 0.24);
-  --glow-2: rgba(77, 238, 224, 0.16);
-  --glow-3: rgba(255, 109, 207, 0.13);
+  --text-hi: #14161b;
+  --text-mid: #62666f;
+  --text-lo: #9297a1;
+  --text-on-inverted: #f5f6f8;
+  --text-on-inverted-mid: #a7abb3;
 
-  --logo-filter: grayscale(1) brightness(1.7);
+  --grid-line: rgba(20, 22, 27, 0.05);
+  --glow-1: rgba(84, 104, 214, 0.1);
+  --glow-2: rgba(84, 104, 214, 0.06);
+  --glow-3: rgba(47, 158, 98, 0.05);
 
-  --shadow-deep: 0 30px 80px -30px rgba(0, 0, 0, 0.7);
-  --shadow-glow: 0 0 0 1px var(--border-glow), 0 0 40px -8px rgba(77, 238, 224, 0.4);
+  --logo-filter: grayscale(1) opacity(0.55);
 
-  --grad-aurora: linear-gradient(120deg, var(--cyan) 0%, var(--violet) 50%, var(--magenta) 100%);
+  --shadow-xs: 0 1px 2px rgba(20, 22, 30, 0.05);
+  --shadow-sm: 0 1px 3px rgba(20, 22, 30, 0.07), 0 1px 2px rgba(20, 22, 30, 0.04);
+  --shadow-deep: 0 12px 32px -12px rgba(20, 22, 30, 0.14), 0 2px 8px -2px rgba(20, 22, 30, 0.06);
+  --shadow-glow: 0 0 0 1px var(--accent-soft), 0 12px 32px -12px rgba(84, 104, 214, 0.28);
+
+  --grad-aurora: linear-gradient(120deg, var(--accent) 0%, var(--accent-2) 100%);
   --grad-aurora-soft: linear-gradient(
     120deg,
-    color-mix(in srgb, var(--cyan) 22%, transparent) 0%,
-    color-mix(in srgb, var(--violet) 22%, transparent) 50%,
-    color-mix(in srgb, var(--magenta) 22%, transparent) 100%
+    color-mix(in srgb, var(--accent) 12%, transparent) 0%,
+    color-mix(in srgb, var(--accent-2) 12%, transparent) 100%
   );
 
-  --radius-md: 1.25rem;
-  --radius-lg: 1.75rem;
-  --radius-xl: 2.5rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
+  --radius-xl: 2rem;
 
-  --font-display: 'Space Grotesk', 'Sora', system-ui, sans-serif;
-  --font-body: 'Sora', system-ui, -apple-system, sans-serif;
+  --font-display: 'Inter', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-// ---- light theme --------------------------------------------------------
-:root[data-theme='light'] {
-  color-scheme: light;
+// ---- dark theme -----------------------------------------------------------
+:root[data-theme='dark'] {
+  color-scheme: dark;
 
-  --bg: #f7f8fc;
-  --bg-elevated: #ffffff;
-  --bg-raise: #eef1f9;
+  --bg: #101114;
+  --bg-elevated: #18191d;
+  --bg-raise: #1e2024;
+  --bg-inverted: #f2f3f6;
+  --bg-inverted-raise: #e7e8ec;
 
-  --surface: rgba(20, 26, 51, 0.035);
-  --surface-strong: rgba(20, 26, 51, 0.065);
-  --border-soft: rgba(20, 26, 51, 0.1);
-  --border-glow: rgba(13, 148, 137, 0.4);
-  --stripe: rgba(20, 26, 51, 0.028);
+  --surface: #18191d;
+  --surface-strong: #202226;
+  --border-soft: #2a2c31;
+  --border-strong: #383b41;
+  --border-glow: var(--accent);
 
-  --cyan: #0d9489;
-  --cyan-soft: #0a7b71;
-  --violet: #6a3ffb;
-  --violet-soft: #5227e0;
-  --magenta: #d1258f;
-  --amber: #c2760a;
+  --accent: #7c8ff0;
+  --accent-hover: #8fa0f3;
+  --accent-soft: #262b45;
+  --accent-2: #5468d6;
 
-  --on-accent: #ffffff;
+  --success: #46c07f;
+  --success-soft: #16281f;
+  --danger: #e07272;
+  --danger-soft: #301b1c;
+  --warning: #e0b23f;
+  --warning-soft: #302a17;
 
-  --text-hi: #11131c;
-  --text-mid: #4a5170;
-  --text-lo: #767f9c;
+  --on-accent: #101114;
 
-  --grid-line: rgba(20, 26, 51, 0.055);
-  --glow-1: rgba(106, 63, 251, 0.12);
-  --glow-2: rgba(13, 148, 137, 0.12);
-  --glow-3: rgba(209, 37, 143, 0.09);
+  --text-hi: #f2f3f6;
+  --text-mid: #a6aab3;
+  --text-lo: #6f737d;
+  --text-on-inverted: #14161b;
+  --text-on-inverted-mid: #4b4f58;
 
-  --logo-filter: grayscale(1) opacity(0.6);
+  --grid-line: rgba(255, 255, 255, 0.045);
+  --glow-1: rgba(124, 143, 240, 0.14);
+  --glow-2: rgba(124, 143, 240, 0.08);
+  --glow-3: rgba(70, 192, 127, 0.06);
 
-  --shadow-deep: 0 24px 60px -30px rgba(17, 19, 36, 0.18);
-  --shadow-glow: 0 0 0 1px var(--border-glow), 0 0 32px -10px rgba(13, 148, 137, 0.3);
+  --logo-filter: grayscale(1) brightness(1.7);
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.28);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.32), 0 1px 2px rgba(0, 0, 0, 0.24);
+  --shadow-deep: 0 16px 40px -16px rgba(0, 0, 0, 0.55), 0 2px 10px -2px rgba(0, 0, 0, 0.3);
+  --shadow-glow: 0 0 0 1px var(--accent-soft), 0 16px 40px -14px rgba(124, 143, 240, 0.35);
 }
 
 * {
@@ -122,7 +143,7 @@ body {
   text-rendering: optimizeLegibility;
   transition: background-color 0.4s ease, color 0.4s ease;
 
-  // faint animated grid + aurora glow, fixed behind all content
+  // faint grid + soft glow, fixed behind all content
   background-image:
     radial-gradient(ellipse 60% 45% at 15% 0%, var(--glow-1), transparent 60%),
     radial-gradient(ellipse 55% 40% at 100% 15%, var(--glow-2), transparent 60%),
@@ -165,7 +186,7 @@ video {
 }
 
 ::selection {
-  background: var(--violet);
+  background: var(--accent);
   color: var(--on-accent);
 }
 
@@ -179,9 +200,13 @@ video {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(var(--cyan), var(--violet));
+  background: var(--border-strong);
   border-radius: 999px;
   border: 2px solid var(--bg);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
 }
 
 // ---- shared utility classes --------------------------------------------
@@ -203,9 +228,9 @@ video {
   font-family: var(--font-display);
   font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--cyan-soft);
+  color: var(--accent);
 
   &::before {
     content: '';
@@ -213,13 +238,13 @@ video {
     height: 0.5rem;
     border-radius: 999px;
     background: var(--grad-aurora);
-    box-shadow: 0 0 12px var(--cyan);
   }
 }
 
 .section-title {
   font-size: clamp(1.9rem, 1.4rem + 2vw, 3rem);
-  line-height: 1.08;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
 }
 
 .gradient-text {
@@ -234,16 +259,15 @@ video {
   background: var(--surface);
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-lg);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  box-shadow: var(--shadow-deep);
-  transition: transform 0.5s var(--ease-out-expo), border-color 0.4s, box-shadow 0.4s,
-    background-color 0.4s;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.4s var(--ease-out-expo), border-color 0.3s, box-shadow 0.3s,
+    background-color 0.3s;
 }
 
 .glass-panel--interactive:hover {
-  border-color: var(--border-glow);
-  box-shadow: var(--shadow-glow), var(--shadow-deep);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-deep);
+  transform: translateY(-2px);
 }
 
 .btn {
@@ -252,51 +276,52 @@ video {
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-  padding: 0.9rem 1.8rem;
+  padding: 0.85rem 1.7rem;
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 0.95rem;
-  border-radius: 999px;
+  font-size: 0.92rem;
+  border-radius: 0.85rem;
   cursor: pointer;
   border: 1px solid transparent;
-  transition: transform 0.35s var(--ease-spring), box-shadow 0.35s, filter 0.3s,
-    background-color 0.3s, border-color 0.3s;
+  transition: transform 0.3s var(--ease-spring), box-shadow 0.3s, filter 0.2s,
+    background-color 0.2s, border-color 0.2s;
   will-change: transform;
 }
 
 .btn:hover {
-  transform: translateY(-2px) scale(1.02);
+  transform: translateY(-1px);
 }
 
 .btn-primary {
-  background: var(--grad-aurora);
+  background: var(--accent);
   color: var(--btn-fg);
-  box-shadow: 0 12px 40px -10px color-mix(in srgb, var(--cyan) 55%, transparent);
+  box-shadow: 0 8px 20px -8px color-mix(in srgb, var(--accent) 65%, transparent);
 }
 
 .btn-primary:hover {
-  filter: brightness(1.08);
-  box-shadow: 0 16px 50px -8px color-mix(in srgb, var(--violet) 60%, transparent);
+  background: var(--accent-hover);
+  box-shadow: 0 10px 24px -8px color-mix(in srgb, var(--accent) 70%, transparent);
 }
 
 .btn-ghost {
   background: var(--surface);
   color: var(--text-hi);
   border-color: var(--border-soft);
+  box-shadow: var(--shadow-xs);
 }
 
 .btn-ghost:hover {
-  border-color: var(--border-glow);
-  background: var(--surface-strong);
+  border-color: var(--border-strong);
+  background: var(--bg-raise);
 }
 
 // ---- scroll reveal (see RevealDirective) --------------------------------
 [data-reveal] {
   opacity: 0;
-  transform: translateY(28px) scale(0.98);
+  transform: translateY(24px);
   transition:
-    opacity 0.9s var(--ease-out-expo),
-    transform 0.9s var(--ease-out-expo);
+    opacity 0.8s var(--ease-out-expo),
+    transform 0.8s var(--ease-out-expo);
   transition-delay: var(--reveal-delay, 0s);
 }
 
@@ -356,7 +381,7 @@ video {
   border-radius: inherit;
   background: radial-gradient(
     280px circle at var(--glare-x, 50%) var(--glare-y, 50%),
-    color-mix(in srgb, var(--text-hi) 14%, transparent),
+    color-mix(in srgb, var(--accent) 10%, transparent),
     transparent 60%
   );
   opacity: 0;
@@ -366,6 +391,29 @@ video {
 
 .tilt-card:hover::after {
   opacity: 1;
+}
+
+// ---- status pills (matches the fleet/mission dashboard vocabulary) -------
+.status-dot {
+  display: inline-block;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 999px;
+  background: var(--text-lo);
+  margin-right: 0.4rem;
+}
+
+.status-dot--accent {
+  background: var(--accent);
+}
+.status-dot--success {
+  background: var(--success);
+}
+.status-dot--danger {
+  background: var(--danger);
+}
+.status-dot--warning {
+  background: var(--warning);
 }
 
 @keyframes marquee {
